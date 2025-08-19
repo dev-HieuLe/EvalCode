@@ -47,6 +47,7 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/reviews" element={<Reviews />} />
+        <Route path="/users/dashboard/:id" element={<Dashboard />} />
         <Route path="/users/dashboard/:id/batch/:batchId" element={<Dashboard />} />
       </Routes>
       {!location.pathname.startsWith("/users/dashboard") && <Footer />}

@@ -4,10 +4,15 @@ import Submissions from "./Main/Submission";
 import Configuration from "./Main/Configuration";
 import { useParams } from "react-router-dom";
 
-const GradingDashboard = () => {
+const GradingDashboard = ({batchId}) => {
   const [activeTab, setActiveTab] = useState("submissions");
-  const { batchId } = useParams();
-
+  if (!batchId) {
+    return (
+      <div className="flex items-center justify-center h-full text-gray-500">
+        Please create or select a batch to start grading.
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-white text-gray-900 px-4 py-10">
       <div className="max-w-5xl mx-auto space-y-4">

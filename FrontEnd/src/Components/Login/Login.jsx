@@ -1,60 +1,72 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../Context/AuthContext";
 
 const Login = () => {
-  const [values, setValues] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { setAuth, setUser } = useContext(AuthContext);
 
-  const handleChange = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
-    });
+  // Form state
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
 
-    // Clear specific field error as user types
-    setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error on typing
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Validate before submit
+  const validateForm = () => {
     const newErrors = {};
-    if (!values.email.trim()) newErrors.email = "Email is required";
-    if (!values.password.trim()) newErrors.password = "Password is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    if (!formData.password.trim()) newErrors.password = "Password is required";
+    return newErrors;
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validateForm();
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    axios
-      .post("/api/login", values, { withCredentials: true })
-      .then((res) => {
-        if (res.data.status === "Success") {
-          setAuth(true);
-          setUser({
-            name: res.data.user.name,
-            email: res.data.user.email,
-            id: res.data.user.id,
-          });
-          navigate(`/users/dashboard/${res.data.user.id}`);
-        }
-      })
-      .catch((err) => {
-        if (err.response?.status === 401) {
-          setErrors({
-            email: "Invalid email or password",
-            password: "Invalid email or password",
-          });
-        } else {
-          setErrors({ email: "Something went wrong. Please try again." });
-        }
+    try {
+      const res = await axios.post("/api/login", formData, {
+        withCredentials: true,
       });
+
+      if (res.data.status === "Success") {
+        setAuth(true);
+        setUser({
+          id: res.data.user.id,
+          name: res.data.user.name,
+          email: res.data.user.email,
+        });
+        navigate(`/users/dashboard/${res.data.user.id}`);
+      }
+    } catch (err) {
+      if (err.response?.status === 401) {
+        setErrors({
+          email: "Invalid email or password",
+          password: "Invalid email or password",
+        });
+      } else {
+        setErrors({
+          email: "Something went wrong. Please try again later.",
+        });
+      }
+    }
   };
 
+  // Dynamic input class
   const inputClass = (field) =>
     `w-full px-4 py-2 rounded-lg border ${
       errors[field] ? "border-red-500" : "border-gray-300"
@@ -76,6 +88,7 @@ const Login = () => {
 
         {/* Right Form Section */}
         <div className="w-full md:w-1/2 p-10 md:p-14">
+          {/* Header */}
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Brand</h1>
           <p className="text-gray-500 text-sm mb-8">Welcome back!</p>
 
@@ -100,7 +113,7 @@ const Login = () => {
             <div className="flex-grow h-px bg-gray-200" />
           </div>
 
-          {/* Form */}
+          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
@@ -110,7 +123,7 @@ const Login = () => {
               <input
                 type="email"
                 name="email"
-                value={values.email}
+                value={formData.email}
                 onChange={handleChange}
                 className={inputClass("email")}
               />
@@ -132,7 +145,7 @@ const Login = () => {
               <input
                 type="password"
                 name="password"
-                value={values.password}
+                value={formData.password}
                 onChange={handleChange}
                 className={inputClass("password")}
               />
@@ -141,6 +154,7 @@ const Login = () => {
               )}
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full py-3 bg-black text-white rounded-lg font-semibold text-sm hover:bg-gray-900 transition"
@@ -149,14 +163,12 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Footer */}
           <p className="text-center text-sm text-gray-500 mt-6">
             OR{" "}
-            <a
-              href="/signup"
-              className="text-black font-medium hover:underline"
-            >
+            <Link to="/signup" className="text-black font-medium hover:underline">
               SIGN UP
-            </a>
+            </Link>
           </p>
         </div>
       </div>
