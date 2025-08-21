@@ -19,7 +19,10 @@ const GradingPage = ({ student, onBack }) => {
         {/* Student Code */}
         <div className="bg-white/60 backdrop-blur-md rounded-2xl border border-gray-200 shadow-md p-4 flex flex-col">
           <div className="flex justify-between mb-2">
-            <p className="text-sm text-gray-500">Language: <span className="text-blue-600 font-medium">Python</span></p>
+            <p className="text-sm text-gray-500">
+              Language:{" "}
+              <span className="text-blue-600 font-medium">Python</span>
+            </p>
             <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-black">
               <Upload className="w-4 h-4" />
               Upload File
@@ -38,7 +41,9 @@ else:
 
         {/* Feedback + Grading */}
         <div className="bg-white/60 backdrop-blur-md rounded-2xl border border-gray-200 shadow-md p-4 flex flex-col">
-          <p className="text-sm text-gray-600 mb-2">Generate AI feedback and assign a final grade.</p>
+          <p className="text-sm text-gray-600 mb-2">
+            Generate AI feedback and assign a final grade.
+          </p>
           <textarea
             rows={10}
             placeholder="Click 'Generate AI Feedback' to populate this area."

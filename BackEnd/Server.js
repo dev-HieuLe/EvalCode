@@ -23,7 +23,7 @@ app.use(cookieParser());
 // Routes
 app.use("/", authRoutes);
 app.use("/batches", batchRoutes);
-app.use("/students", studentRoutes);
+app.use("/batches/:batchId/students", studentRoutes);
 
 app.get("/server", (req, res) => {
   res.send("Server is running and connected to the database!");
