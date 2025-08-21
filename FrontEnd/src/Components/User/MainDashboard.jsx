@@ -15,6 +15,30 @@ const Dashboard = () => {
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState(null);
 
+  const handleDeleteBatch = async (batchIdToDelete) => {
+    try {
+      await axios.delete(`/api/batches/${batchIdToDelete}`, {
+        withCredentials: true,
+      });
+
+      setBatches((prev) => prev.filter((b) => b.id !== batchIdToDelete));
+
+      // if user is currently viewing this deleted batch, redirect
+      if (String(batchId) === String(batchIdToDelete)) {
+        if (batches.length > 1) {
+          // redirect to first remaining batch
+          navigate(`/users/dashboard/${id}/batch/${batches[0].id}`);
+        } else {
+          // no batches left
+          navigate(`/users/dashboard/${id}`);
+        }
+      }
+    } catch (err) {
+      console.error("❌ Error deleting batch:", err);
+      await fetchBatches(); // fallback refresh
+    }
+  };
+
   // Fetch batches (single source of truth)
   const fetchBatches = useCallback(async () => {
     setFetching(true);
@@ -36,10 +60,9 @@ const Dashboard = () => {
         if (!exists) {
           // If requested batchId does not exist, redirect to first batch (if any)
           if (fetchedBatches.length > 0) {
-            navigate(
-              `/users/dashboard/${id}/batch/${fetchedBatches[0].id}`,
-              { replace: true }
-            );
+            navigate(`/users/dashboard/${id}/batch/${fetchedBatches[0].id}`, {
+              replace: true,
+            });
           } else {
             // no batches at all — navigate to base dashboard (no batch)
             navigate(`/users/dashboard/${id}`, { replace: true });
@@ -119,6 +142,7 @@ const Dashboard = () => {
         batches={batches}
         loadingBatches={fetching}
         onCreateBatch={handleCreateBatch}
+        onDeleteBatch={handleDeleteBatch}
       />
 
       <main className="flex-1 overflow-y-auto bg-white p-6">

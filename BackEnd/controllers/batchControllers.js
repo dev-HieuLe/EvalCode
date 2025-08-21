@@ -12,6 +12,23 @@ export const getBatches = async (req, res) => {
   }
 };
 
+//Including Batch ID, to edit that batch
+export const getBatchById = async (req, res) => {
+  const batchId = req.params.batchId;
+  try {
+    const [rows] = await db.execute(
+      "SELECT * FROM Batches WHERE id = ? AND user_id = ?",
+      [batchId, req.id]
+    );
+    if (rows.length === 0)
+      return res.status(404).json({ error: "Batch not found or unauthorized" });
+
+    res.json(rows[0]);
+  } catch {
+    res.status(500).json({ error: "Failed to get batch" });
+  }
+};
+
 export const createBatch = async (req, res) => {
   const {
     title,

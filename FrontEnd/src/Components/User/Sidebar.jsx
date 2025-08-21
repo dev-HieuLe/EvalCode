@@ -15,7 +15,7 @@ import {
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 
-const Sidebar = ({ batches = [], loadingBatches = false, onCreateBatch }) => {
+const Sidebar = ({ batches = [], loadingBatches = false, onCreateBatch, onDeleteBatch }) => {
   const navigate = useNavigate();
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { auth, user, setAuth, setUser, setWasLoggedInBefore, loading } =
@@ -33,6 +33,12 @@ const Sidebar = ({ batches = [], loadingBatches = false, onCreateBatch }) => {
     setUser({});
     setWasLoggedInBefore(false);
     navigate("/");
+  };
+
+  const handleDelete = (batchId) => {
+    if (window.confirm("Are you sure you want to delete this batch?")) {
+      onDeleteBatch?.(batchId);
+    }
   };
 
   return (
@@ -57,17 +63,29 @@ const Sidebar = ({ batches = [], loadingBatches = false, onCreateBatch }) => {
             batches.map((batch) => {
               const isActive = String(batch.id) === String(batchId);
               return (
-                <Link
+                <div
                   key={batch.id}
-                  to={`/users/dashboard/${id}/batch/${batch.id}`}
-                  className={`block px-3 py-2 rounded text-sm transition ${
+                  className={`flex items-center justify-between px-3 py-2 rounded text-sm transition ${
                     isActive
                       ? "bg-gray-100 text-black font-medium"
                       : "text-gray-700 hover:bg-gray-50"
                   }`}
                 >
-                  {batch.title || batch.name || `Batch ${batch.id}`}
-                </Link>
+                  <Link
+                    to={`/users/dashboard/${id}/batch/${batch.id}`}
+                    className="flex-1 truncate"
+                  >
+                    {batch.title || batch.name || `Batch ${batch.id}`}
+                  </Link>
+
+                  <button
+                    onClick={() => handleDelete(batch.id)}
+                    className="ml-2 text-gray-400 hover:text-red-600"
+                    title="Delete batch"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               );
             })
           ) : (

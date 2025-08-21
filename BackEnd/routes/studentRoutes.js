@@ -11,6 +11,6 @@ router.post("/", verifyUser, addStudent);
 
 // For single student operations
 router.put("/:id", verifyUser, updateStudent);
-router.delete("/:studentId", verifyUser, deleteStudent);
+router.delete("/:id", verifyUser, deleteStudent);
 
 export default router;
