@@ -12,8 +12,6 @@ const db = mysql.createPool({
   connectionLimit: 20,
 });
 
-console.log('process.env.DB_HOST:', process.env.DB_HOST);
-console.log('process.env.DB_USER:', process.env.DB_USER);
 
 // Test the database connection
 (async () => {
