@@ -14,7 +14,7 @@ export const getStudents = async (req, res) => {
     }
 
     const [students] = await db.execute(
-      "SELECT * FROM Students WHERE batch_id = ? ORDER BY id ASC",
+      "SELECT * FROM students WHERE batch_id = ? ORDER BY id ASC",
       [batchId]
     );
 
@@ -45,12 +45,12 @@ export const addStudent = async (req, res) => {
 
     // insert only batch_id + name
     const [result] = await db.execute(
-      `INSERT INTO Students (batch_id, name, status) VALUES (?, ?, ?)`,
+      `INSERT INTO students (batch_id, name, status) VALUES (?, ?, ?)`,
       [batchId, name, "Awaiting Graded"]
     );
 
     // return the new student row
-    const [rows] = await db.execute("SELECT * FROM Students WHERE id = ?", [
+    const [rows] = await db.execute("SELECT * FROM students WHERE id = ?", [
       result.insertId,
     ]);
     res.status(201).json(rows[0]);
