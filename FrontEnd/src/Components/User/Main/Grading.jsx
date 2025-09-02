@@ -67,9 +67,24 @@ const GradingPage = ({ student, onBack, onUpdate }) => {
     }
   };
 
-  const handleGenerateAI = () => {
-    setAiFeedback("🔮 AI Feedback generated here...");
-  };
+const handleGenerateAI = async () => {
+  setError(null);
+  setLoading(true);
+  try {
+    const res = await axios.post(
+      `/api/ai/batches/${batchId}/students/${student.id}/feedback`,
+      {code},
+      { withCredentials: true }
+    );
+    setAiFeedback(res.data.feedback);
+  } catch (err) {
+    console.error("Failed to generate AI feedback:", err);
+    setError("Could not generate AI feedback.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="text-gray-900">

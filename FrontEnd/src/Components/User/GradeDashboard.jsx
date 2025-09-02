@@ -3,8 +3,9 @@ import { FileText, Settings } from "lucide-react";
 import Submissions from "./Main/Submission";
 import Configuration from "./Main/Configuration";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
-const GradingDashboard = ({batchId}) => {
+const GradingDashboard = ({ batchId }) => {
   const [activeTab, setActiveTab] = useState("submissions");
   if (!batchId) {
     return (
@@ -13,6 +14,25 @@ const GradingDashboard = ({batchId}) => {
       </div>
     );
   }
+  const handleExport = async () => {
+    try {
+      const res = await axios.get(`/api/export/${batchId}`, {
+        responseType: "blob",
+        withCredentials: true,
+      });
+
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `batch_${batchId}_report.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error("Export failed:", err);
+      alert("Failed to export PDF");
+    }
+  };
   return (
     <div className="min-h-screen bg-white text-gray-900 px-4 py-10">
       <div className="max-w-5xl mx-auto space-y-4">
@@ -54,6 +74,13 @@ const GradingDashboard = ({batchId}) => {
         <div className="bg-white/60 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-6">
           {activeTab === "submissions" ? <Submissions /> : <Configuration />}
         </div>
+        {/* Export button */}
+        <button
+          onClick={handleExport}
+          className="mt-10 px-5 py-2.5 rounded-xl bg-gradient-to-r border border-gray-200 from-green-400 to-emerald-400 text-white font-semibold hover:from-green-600 hover:to-emerald-500 hover:shadow-sm transition-transform duration-200 hover:-translate-y-0.5"
+        >
+          Export PDF Report
+        </button>
       </div>
     </div>
   );

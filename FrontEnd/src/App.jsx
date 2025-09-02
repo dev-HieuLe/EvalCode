@@ -1,7 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
 //Home
 import Home from "./Components/Homepage/Hero";
 import Information from "./Components/Homepage/information";
@@ -22,6 +21,8 @@ import Pricing from "./Components/Pricing";
 import Reviews from "./Components/Reviews";
 //Dashboard
 import Dashboard from "./Components/User/MainDashboard";
+//CHatBot
+import ChatbotWidget from "./Components/ChatBot"; 
 
 function App() {
   const location = useLocation();
@@ -50,7 +51,9 @@ function App() {
         <Route path="/users/dashboard/:id" element={<Dashboard />} />
         <Route path="/users/dashboard/:id/batch/:batchId" element={<Dashboard />} />
       </Routes>
+      
       {!location.pathname.startsWith("/users/dashboard") && <Footer />}
+      <ChatbotWidget />
     </>
   );
 }
