@@ -21,8 +21,8 @@ export const register = async (req, res) => {
     const [newUser] = await db.execute("SELECT credits FROM Users WHERE id = ?", [id]);
     const credits = newUser[0].credits;
 
-    res.cookie("token", accessToken, { httpOnly: true, secure: false, sameSite: "Lax" });
-    res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: false, sameSite: "Lax" });
+    res.cookie("token", accessToken, { httpOnly: true, secure: false, sameSite: "None" });
+    res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: false, sameSite: "None" });
 
     return res.status(201).json({ status: "Success", user: { name, email, id, credits } });
   } catch (err) {
