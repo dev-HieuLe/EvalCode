@@ -13,7 +13,7 @@ export const generateFeedback = async (req, res) => {
     }
     // 1. Get batch config
     const [batchRows] = await db.execute(
-      "SELECT * FROM Batches WHERE id = ? AND user_id = ?",
+      "SELECT * FROM batches WHERE id = ? AND user_id = ?",
       [batchId, req.id]
     );
     if (batchRows.length === 0)
@@ -22,7 +22,7 @@ export const generateFeedback = async (req, res) => {
 
     // 2. Get student code
     const [studentRows] = await db.execute(
-      "SELECT * FROM Students WHERE id = ? AND batch_id = ?",
+      "SELECT * FROM students WHERE id = ? AND batch_id = ?",
       [studentId, batchId]
     );
     if (studentRows.length === 0)
@@ -65,7 +65,7 @@ Instructions for feedback:
 
     // 5. Save feedback to DB (optional)
     await db.execute(
-      "UPDATE Students SET ai_feedback = ? WHERE id = ?",
+      "UPDATE students SET ai_feedback = ? WHERE id = ?",
       [aiFeedback, studentId]
     );
 

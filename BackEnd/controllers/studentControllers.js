@@ -6,7 +6,7 @@ export const getStudents = async (req, res) => {
   try {
     // Check batch ownership
     const [batchRows] = await db.execute(
-      "SELECT id FROM Batches WHERE id = ? AND user_id = ?",
+      "SELECT id FROM batches WHERE id = ? AND user_id = ?",
       [batchId, req.id]
     );
     if (batchRows.length === 0) {
@@ -36,7 +36,7 @@ export const addStudent = async (req, res) => {
   try {
     // verify batch ownership
     const [batchRows] = await db.execute(
-      "SELECT id FROM Batches WHERE id = ? AND user_id = ?",
+      "SELECT id FROM batches WHERE id = ? AND user_id = ?",
       [batchId, req.id]
     );
     if (batchRows.length === 0) {
@@ -71,8 +71,8 @@ export const updateStudent = async (req, res) => {
     }
 
     const [rowsCheck] = await db.execute(
-      `SELECT s.id FROM Students s
-       JOIN Batches b ON s.batch_id = b.id
+      `SELECT s.id FROM students s
+       JOIN batches b ON s.batch_id = b.id
        WHERE s.id = ? AND b.user_id = ?`,
       [studentId, req.id]
     );
@@ -84,12 +84,12 @@ export const updateStudent = async (req, res) => {
     }
 
     await db.execute(
-      `UPDATE Students SET status = ?, grade = ?, code = ?, ai_feedback = ? WHERE id = ?`,
+      `UPDATE students SET status = ?, grade = ?, code = ?, ai_feedback = ? WHERE id = ?`,
       [status, grade, code, ai_feedback, studentId]
     );
 
     // Return updated student row
-    const [rows] = await db.execute("SELECT * FROM Students WHERE id = ?", [
+    const [rows] = await db.execute("SELECT * FROM students WHERE id = ?", [
       studentId,
     ]);
     res.json(rows[0]);
@@ -103,9 +103,9 @@ export const deleteStudent = async (req, res) => {
   const studentId = req.params.id;
   try {
     const [rows] = await db.execute(
-      `SELECT Students.id FROM Students
-       JOIN Batches ON Students.batch_id = Batches.id
-       WHERE Students.id = ? AND Batches.user_id = ?`,
+      `SELECT students.id FROM students
+       JOIN batches ON students.batch_id = batches.id
+       WHERE students.id = ? AND batches.user_id = ?`,
       [studentId, req.id]
     );
     if (rows.length === 0)
@@ -113,7 +113,7 @@ export const deleteStudent = async (req, res) => {
         .status(403)
         .json({ error: "Student not found or unauthorized" });
 
-    await db.execute("DELETE FROM Students WHERE id = ?", [studentId]);
+    await db.execute("DELETE FROM students WHERE id = ?", [studentId]);
     res.status(200).json({ status: "Student deleted" });
   } catch (err) {
     console.error("deleteStudent error:", err);

@@ -8,7 +8,7 @@ export const exportBatchReport = async (req, res) => {
   try {
     // Verify batch belongs to user
     const [batchRows] = await db.execute(
-      "SELECT * FROM Batches WHERE id = ? AND user_id = ?",
+      "SELECT * FROM batches WHERE id = ? AND user_id = ?",
       [batchId, req.id]
     );
 
@@ -19,7 +19,7 @@ export const exportBatchReport = async (req, res) => {
 
     // Get students from batch
     const [students] = await db.execute(
-      "SELECT id, name, grade, ai_feedback FROM Students WHERE batch_id = ? ORDER BY id ASC",
+      "SELECT id, name, grade, ai_feedback FROM students WHERE batch_id = ? ORDER BY id ASC",
       [batchId]
     );
 
