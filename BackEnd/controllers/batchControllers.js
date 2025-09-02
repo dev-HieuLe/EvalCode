@@ -3,7 +3,7 @@ import db from "../config/db.js";
 export const getBatches = async (req, res) => {
   try {
     const [batches] = await db.execute(
-      "SELECT * FROM Batches WHERE user_id = ?",
+      "SELECT * FROM batches WHERE user_id = ?",
       [req.id]
     );
     res.json(batches);
@@ -17,7 +17,7 @@ export const getBatchById = async (req, res) => {
   const batchId = req.params.batchId;
   try {
     const [rows] = await db.execute(
-      "SELECT * FROM Batches WHERE id = ? AND user_id = ?",
+      "SELECT * FROM batches WHERE id = ? AND user_id = ?",
       [batchId, req.id]
     );
     if (rows.length === 0)
@@ -41,7 +41,7 @@ export const createBatch = async (req, res) => {
 
   try {
     const [result] = await db.execute(
-      `INSERT INTO Batches (user_id, title, instructions, grading_criteria, language, feedback_tone, total_points) 
+      `INSERT INTO batches (user_id, title, instructions, grading_criteria, language, feedback_tone, total_points) 
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         req.id,
@@ -82,14 +82,14 @@ export const updateBatch = async (req, res) => {
 
   try {
     const [rows] = await db.execute(
-      "SELECT * FROM Batches WHERE id = ? AND user_id = ?",
+      "SELECT * FROM batches WHERE id = ? AND user_id = ?",
       [batchId, req.id]
     );
     if (rows.length === 0)
       return res.status(404).json({ error: "Batch not found or unauthorized" });
 
     await db.execute(
-      `UPDATE Batches SET title=?, instructions=?, grading_criteria=?, language=?, feedback_tone=?, total_points=? WHERE id=?`,
+      `UPDATE batches SET title=?, instructions=?, grading_criteria=?, language=?, feedback_tone=?, total_points=? WHERE id=?`,
       [
         title,
         instructions,
@@ -110,13 +110,13 @@ export const deleteBatch = async (req, res) => {
   const batchId = req.params.batchId;
   try {
     const [rows] = await db.execute(
-      "SELECT * FROM Batches WHERE id = ? AND user_id = ?",
+      "SELECT * FROM batches WHERE id = ? AND user_id = ?",
       [batchId, req.id]
     );
     if (rows.length === 0)
       return res.status(404).json({ error: "Batch not found or unauthorized" });
 
-    await db.execute("DELETE FROM Batches WHERE id = ?", [batchId]);
+    await db.execute("DELETE FROM batches WHERE id = ?", [batchId]);
     res.status(200).json({ status: "Batch deleted" });
   } catch {
     res.status(500).json({ error: "Failed to delete batch" });
