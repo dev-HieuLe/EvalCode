@@ -47,8 +47,8 @@ export const login = async (req, res) => {
     const accessToken = generateAccessToken({ id, email, name });
     const refreshToken = generateRefreshToken({ id, email });
 
-    res.cookie("token", accessToken, { httpOnly: true, secure: false, sameSite: "Lax" });
-    res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: false, sameSite: "Lax" });
+    res.cookie("token", accessToken, { httpOnly: true, secure: true, sameSite: "None" });
+    res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: true, sameSite: "None" });
 
     return res.status(200).json({ status: "Success", user: { name, email, id, credits } });
   } catch (err) {
@@ -58,8 +58,8 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("token", { httpOnly: true, secure: false, sameSite: "Lax" });
-  res.clearCookie("refreshToken", { httpOnly: true, secure: false, sameSite: "Lax" });
+  res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "None" });
+  res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: "None" });
   return res.json({ Status: "Success" });
 };
 
@@ -74,7 +74,7 @@ export const refreshToken = (req, res) => {
     const name = rows[0].name;
 
     const newAccessToken = generateAccessToken({ id: user.id, email: user.email, name });
-    res.cookie("token", newAccessToken, { httpOnly: true, secure: false, sameSite: "Lax" });
+    res.cookie("token", newAccessToken, { httpOnly: true, secure: true, sameSite: "None" });
     return res.json({ status: "Success" });
   });
 };
