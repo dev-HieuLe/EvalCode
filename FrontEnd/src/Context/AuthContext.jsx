@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const tryRefreshToken = async () => {
     try {
       const res = await axios.post(
-        "/api/refresh-token",
+        `${import.meta.env.VITE_API_BASE_URL}/refresh-token`,
         {},
         { withCredentials: true }
       );
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   //Check token Session
   const checkAuth = async () => {
     try {
-      const res = await axios.get("/api/user", { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user`, { withCredentials: true });
       if (res.status === 200 && res.data?.name) {
         setAuth(true);
         setUser({
@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         setAuth(false);
         setUser({});
+        setLoading(false);
       }
     } finally {
       setAuthCheckedOnce(true);
@@ -76,7 +77,7 @@ export const AuthProvider = ({ children }) => {
     }, 1 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(interval);
-  }, []);
+  }, [wasLoggedInBefore]);
 
 
   return (
