@@ -39,7 +39,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post("/api/login", formData, {
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/login`, formData, {
         withCredentials: true,
       });
 

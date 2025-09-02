@@ -43,11 +43,11 @@ const Signup = () => {
     }
 
     axios
-      .post("/api/register", dataToSend)
+      .post(`${import.meta.env.VITE_API_BASE_URL}/register`, dataToSend)
       .then((res) => {
         if (res.data.status === "Success") {
           axios
-            .get("/api/user", { withCredentials: true })
+            .get(`${import.meta.env.VITE_API_BASE_URL}/user`, { withCredentials: true })
             .then((userRes) => {
               setUser(userRes.data);
               setAuth(true);

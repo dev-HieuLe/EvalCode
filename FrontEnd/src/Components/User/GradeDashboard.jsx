@@ -16,7 +16,7 @@ const GradingDashboard = ({ batchId }) => {
   }
   const handleExport = async () => {
     try {
-      const res = await axios.get(`/api/export/${batchId}`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/export/${batchId}`, {
         responseType: "blob",
         withCredentials: true,
       });

@@ -29,7 +29,7 @@ const Submissions = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get(`/api/batches/${batchId}/students`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}/students`, {
           withCredentials: true,
         });
         setStudents(res.data || []);
@@ -47,7 +47,7 @@ const Submissions = () => {
     if (!newStudentName.trim()) return;
     try {
       const res = await axios.post(
-        `/api/batches/${batchId}/students`,
+        `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}/students`,
         { name: newStudentName },
         { withCredentials: true }
       );
@@ -62,7 +62,7 @@ const Submissions = () => {
 
   const handleDeleteStudent = async (studentId) => {
     try {
-      await axios.delete(`/api/batches/${batchId}/students/${studentId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}/students/${studentId}`, {
         withCredentials: true,
       });
       setStudents((prev) => prev.filter((s) => s.id !== studentId));

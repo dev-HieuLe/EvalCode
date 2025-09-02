@@ -19,7 +19,7 @@ const Configuration = () => {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const res = await axios.get(`/api/batches/${batchId}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`);
         if (res.data) {
           setConfig({
             title: res.data.title || "",
@@ -45,7 +45,7 @@ const Configuration = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`/api/batches/${batchId}`, config);
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`, config);
       alert("Configuration saved successfully!");
     } catch (err) {
       console.error("Error saving config:", err);

@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   const handleDeleteBatch = async (batchIdToDelete) => {
     try {
-      await axios.delete(`/api/batches/${batchIdToDelete}`, {
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchIdToDelete}`, {
         withCredentials: true,
       });
 
@@ -46,7 +46,7 @@ const Dashboard = () => {
     try {
       // Use single endpoint that returns batches for the authenticated user.
       // (Backend should use req.id from verifyUser to filter).
-      const res = await axios.get("/api/batches", { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/batches`, { withCredentials: true });
       const fetchedBatches = Array.isArray(res.data) ? res.data : [];
 
       setBatches(fetchedBatches);
@@ -99,7 +99,7 @@ const Dashboard = () => {
         total_points: 100,
       };
 
-      const res = await axios.post("/api/batches", payload, {
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/batches`, payload, {
         withCredentials: true,
       });
 

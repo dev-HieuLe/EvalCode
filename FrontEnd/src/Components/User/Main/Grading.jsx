@@ -18,7 +18,7 @@ const GradingPage = ({ student, onBack, onUpdate }) => {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const res = await axios.get(`/api/batches/${batchId}`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`, {
           withCredentials: true,
         });
         setMaxGrade(res.data.total_points || null);
@@ -47,7 +47,7 @@ const GradingPage = ({ student, onBack, onUpdate }) => {
     setLoading(true);
     try {
       const res = await axios.put(
-        `/api/batches/${batchId}/students/${student.id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}/students/${student.id}`,
         {
           status: "Graded",
           grade: numericGrade,
@@ -72,7 +72,7 @@ const handleGenerateAI = async () => {
   setLoading(true);
   try {
     const res = await axios.post(
-      `/api/ai/batches/${batchId}/students/${student.id}/feedback`,
+      `${import.meta.env.VITE_API_BASE_URL}/ai/batches/${batchId}/students/${student.id}/feedback`,
       {code},
       { withCredentials: true }
     );
