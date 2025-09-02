@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 //Home
 import Home from "./Components/Homepage/Hero";
-import Information from "./Components/Homepage/information";
+import Information from "./Components/Homepage/Information";
 import Tutorial from "./Components/Homepage/Tutorial";
 import Testimonial from "./Components/Homepage/Testimonials";
-import Price from "./Components/Homepage/price";
+import Price from "./Components/Homepage/Price";
 import JoinUsNow from "./Components/Homepage/JoinUsNow";
 //Navbar
 import Navbar from "./Components/Navbar";
