@@ -8,8 +8,12 @@ const db = mysql.createPool({
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "!mao1501",
   database: process.env.DB_NAME || "evalyn",
+  port: process.env.DB_PORT || 3306,
   connectionLimit: 20,
 });
+
+console.log('process.env.DB_HOST:', process.env.DB_HOST);
+console.log('process.env.DB_USER:', process.env.DB_USER);
 
 // Test the database connection
 (async () => {
