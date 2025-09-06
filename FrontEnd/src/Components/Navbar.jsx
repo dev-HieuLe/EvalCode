@@ -21,7 +21,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     axios
-      .get("/api/logout")
+      .get(`${import.meta.env.VITE_API_BASE_URL}/logout`)
       .then((res) => {
         setAuth(false);
         setUser({});
@@ -35,7 +35,7 @@ const Navbar = () => {
   const handleDirect = async () => {
     try {
       // First try to get the user
-      const res = await axios.get("/api/user", { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user`, { withCredentials: true });
 
       if (res.data?.id) {
         navigate(`/users/dashboard/${res.data.id}`);
@@ -47,7 +47,7 @@ const Navbar = () => {
         try {
           // Try to refresh the token if not checkAuth()
           const refresh = await axios.post(
-            "/api/refresh-token",
+            `${import.meta.env.VITE_API_BASE_URL}/refresh-token`,
             {},
             { withCredentials: true }
           );
