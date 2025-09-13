@@ -47,7 +47,11 @@ const Configuration = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`, config);
+      await axios.put(
+      `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`,
+      config,
+      { withCredentials: true }
+    );
       alert("Configuration saved successfully!");
     } catch (err) {
       console.error("Error saving config:", err);
