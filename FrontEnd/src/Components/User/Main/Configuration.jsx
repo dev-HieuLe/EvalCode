@@ -19,7 +19,9 @@ const Configuration = () => {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`);
+        const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`,
+        { withCredentials: true });
         if (res.data) {
           setConfig({
             title: res.data.title || "",
