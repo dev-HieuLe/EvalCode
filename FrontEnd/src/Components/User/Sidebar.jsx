@@ -15,7 +15,12 @@ import {
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 
-const Sidebar = ({ batches = [], loadingBatches = false, onCreateBatch, onDeleteBatch }) => {
+const Sidebar = ({
+  batches = [],
+  loadingBatches = false,
+  onCreateBatch,
+  onDeleteBatch,
+}) => {
   const navigate = useNavigate();
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { auth, user, setAuth, setUser, setWasLoggedInBefore, loading } =
@@ -24,7 +29,10 @@ const Sidebar = ({ batches = [], loadingBatches = false, onCreateBatch, onDelete
 
   const handleLogout = async () => {
     try {
-      await fetch("/logout", { credentials: "include" }); // fallback
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/logout`, {
+        method: "GET",
+        credentials: "include",
+      }); // fallback
     } catch (e) {
       // ignore
     }

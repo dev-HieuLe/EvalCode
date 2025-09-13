@@ -21,14 +21,14 @@ const Navbar = () => {
 
   const handleLogout = () => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/logout`)
+      .get(`${import.meta.env.VITE_API_BASE_URL}/logout`, { withCredentials: true })
       .then((res) => {
         setAuth(false);
         setUser({});
         setWasLoggedInBefore(false);
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("Logout failed:", err));
   };
 
   const navigate = useNavigate();
