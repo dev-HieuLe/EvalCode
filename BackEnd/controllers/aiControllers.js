@@ -56,18 +56,17 @@ Instructions for feedback:
    Suggested Score: [number between 0 and ${batch.total_points}]
 `;
 
-
     // 4. Call Gemini
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const result = await model.generateContent(prompt);
     const aiFeedback = result.response.text();
 
     // 5. Save feedback to DB (optional)
-    await db.execute(
-      "UPDATE students SET ai_feedback = ? WHERE id = ?",
-      [aiFeedback, studentId]
-    );
+    await db.execute("UPDATE students SET ai_feedback = ? WHERE id = ?", [
+      aiFeedback,
+      studentId,
+    ]);
 
     res.json({ feedback: aiFeedback });
   } catch (err) {
