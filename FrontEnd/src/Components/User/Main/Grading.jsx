@@ -1,8 +1,10 @@
-// GradingPage.jsx
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, BrainCircuit, Save } from "lucide-react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
+const MONO_FONT = `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
 
 const GradingPage = ({ student, onBack, onUpdate }) => {
   const { batchId } = useParams();
@@ -10,17 +12,17 @@ const GradingPage = ({ student, onBack, onUpdate }) => {
   const [code, setCode] = useState(student.code || "");
   const [aiFeedback, setAiFeedback] = useState(student.ai_feedback || "");
   const [grade, setGrade] = useState(student.grade || "");
-  const [maxGrade, setMaxGrade] = useState(null); // from config
+  const [maxGrade, setMaxGrade] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch batch config (to get maxGrade)
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`,
+          { withCredentials: true }
+        );
         setMaxGrade(res.data.total_points || null);
       } catch (err) {
         console.error("Failed to load config:", err);
@@ -33,7 +35,6 @@ const GradingPage = ({ student, onBack, onUpdate }) => {
   const handleSave = async () => {
     setError(null);
 
-    // Validation: check grade
     if (!grade || isNaN(grade)) {
       setError("Grade must be a number.");
       return;
@@ -67,88 +68,207 @@ const GradingPage = ({ student, onBack, onUpdate }) => {
     }
   };
 
-const handleGenerateAI = async () => {
-  setError(null);
-  setLoading(true);
-  try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/ai/batches/${batchId}/students/${student.id}/feedback`,
-      {code},
-      { withCredentials: true }
-    );
-    setAiFeedback(res.data.feedback);
-  } catch (err) {
-    console.error("Failed to generate AI feedback:", err);
-    setError("Could not generate AI feedback.");
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleGenerateAI = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/ai/batches/${batchId}/students/${student.id}/feedback`,
+        { code },
+        { withCredentials: true }
+      );
+      setAiFeedback(res.data.feedback);
+    } catch (err) {
+      console.error("Failed to generate AI feedback:", err);
+      setError("Could not generate AI feedback.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const surfaceStyle = {
+    background: "#ffffff",
+    color: "#000000",
+    border: "1px solid #e4e4e7",
+    borderRadius: 12,
+    padding: 24,
+  };
+
+  const inputBoxStyle = {
+    width: "100%",
+    background: "#fbfbf5",
+    color: "#000000",
+    border: "1px solid #e4e4e7",
+    borderRadius: 8,
+    padding: 12,
+    fontFamily: MONO_FONT,
+    fontSize: 14,
+    outline: "none",
+  };
 
   return (
-    <div className="text-gray-900">
+    <div style={{ color: "#000000" }}>
       <button
         onClick={onBack}
-        className="flex items-center gap-2 text-md mb-6 text-gray-600 hover:text-black"
+        className="inline-flex items-center gap-2 mb-6"
+        style={{
+          color: "#52525b",
+          fontSize: 14,
+          fontWeight: 500,
+          letterSpacing: "0.28px",
+        }}
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to Submissions
+        Back to submissions
       </button>
 
-      <h2 className="text-2xl font-bold mb-1">Grading: {student.name}</h2>
-      <p className="text-gray-500 mb-6">CS101: Python Basics</p>
+      <h2
+        style={{
+          fontFamily: DISPLAY_FONT,
+          fontSize: 48,
+          fontWeight: 330,
+          lineHeight: 1.14,
+        }}
+      >
+        Grading: {student.name}
+      </h2>
+      <p
+        className="mt-2 mb-8"
+        style={{
+          color: "#52525b",
+          fontSize: 16,
+          fontWeight: 420,
+          lineHeight: 1.5,
+        }}
+      >
+        CS101: Python Basics
+      </p>
 
-      {error && <div className="text-red-500 mb-3">{error}</div>}
+      {error && (
+        <div
+          className="mb-3"
+          style={{
+            color: "#dc2626",
+            fontSize: 14,
+            fontWeight: 500,
+            letterSpacing: "0.28px",
+          }}
+        >
+          {error}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Student Code */}
-        <div className="bg-white/60 backdrop-blur-md rounded-2xl border border-gray-200 shadow-md p-4 flex flex-col">
+        <div style={surfaceStyle}>
+          <h3
+            className="mb-3"
+            style={{
+              fontFamily: DISPLAY_FONT,
+              fontSize: 18,
+              fontWeight: 500,
+              letterSpacing: "0.72px",
+              lineHeight: 1.25,
+            }}
+          >
+            Student code
+          </h3>
           <textarea
-            placeholder="Put your student's code here..."
-            className="w-full h-[400px] overflow-y-auto bg-white/40 p-3 rounded-xl border border-gray-300 text-sm font-mono focus:outline-none"
+            placeholder="Paste student code here..."
+            className="h-[400px]"
+            style={inputBoxStyle}
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
         </div>
 
         {/* Feedback + Grading */}
-        <div className="bg-white/60 backdrop-blur-md rounded-2xl border border-gray-200 shadow-md p-4 flex flex-col">
+        <div style={surfaceStyle}>
+          <h3
+            className="mb-3"
+            style={{
+              fontFamily: DISPLAY_FONT,
+              fontSize: 18,
+              fontWeight: 500,
+              letterSpacing: "0.72px",
+              lineHeight: 1.25,
+            }}
+          >
+            AI feedback
+          </h3>
           <textarea
             rows={10}
-            placeholder="Click 'Generate AI Feedback' to populate this area."
-            className="w-full h-[250px] overflow-y-auto bg-white/40 p-3 rounded-xl border border-gray-300 text-sm font-mono focus:outline-none"
+            placeholder="Click 'Generate AI feedback' to populate this area."
+            className="h-[250px]"
+            style={inputBoxStyle}
             value={aiFeedback}
             readOnly
           />
 
           <button
             onClick={handleGenerateAI}
-            className="mt-3 flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl shadow"
+            className="mt-4 w-full inline-flex items-center justify-center gap-2"
+            style={{
+              background: "#000000",
+              color: "#ffffff",
+              borderRadius: 9999,
+              padding: "12px 24px",
+              fontSize: 16,
+              fontWeight: 550,
+              border: "none",
+            }}
           >
             <BrainCircuit className="w-4 h-4" />
-            Generate AI Feedback
+            Generate AI feedback
           </button>
 
-          <div className="mt-4 flex flex-col gap-2">
+          <div className="mt-6 flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <input
                 type="number"
                 placeholder="Grade"
                 value={grade}
                 onChange={(e) => setGrade(e.target.value)}
-                className=" px-4 py-2 bg-white/40 border border-gray-300 rounded-xl focus:outline-none"
+                style={{
+                  background: "#ffffff",
+                  color: "#000000",
+                  border: "1px solid #e4e4e7",
+                  borderRadius: 8,
+                  padding: "10px 12px",
+                  fontSize: 16,
+                  width: 100,
+                  outline: "none",
+                }}
               />
-              <span className="whitespace-nowrap">/ {maxGrade !== null ? maxGrade : "..."}</span>
+              <span
+                className="whitespace-nowrap"
+                style={{
+                  color: "#52525b",
+                  fontSize: 16,
+                  fontWeight: 420,
+                }}
+              >
+                / {maxGrade !== null ? maxGrade : "..."}
+              </span>
             </div>
 
             <button
               onClick={handleSave}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow disabled:opacity-50"
+              className="w-full inline-flex items-center justify-center gap-2"
+              style={{
+                background: "#c1fbd4",
+                color: "#000000",
+                borderRadius: 9999,
+                padding: "12px 24px",
+                fontSize: 16,
+                fontWeight: 550,
+                border: "none",
+                opacity: loading ? 0.5 : 1,
+              }}
             >
               <Save className="w-4 h-4" />
-              {loading ? "Saving..." : "Finalize and Save Grade"}
+              {loading ? "Saving..." : "Finalize and save grade"}
             </button>
           </div>
         </div>

@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 import Home from "./Components/Homepage/Hero";
 import Information from "./Components/Homepage/Information";
 import Tutorial from "./Components/Homepage/Tutorial";
-import Testimonial from "./Components/Homepage/Testimonials";
 import Price from "./Components/Homepage/Price";
 import JoinUsNow from "./Components/Homepage/JoinUsNow";
 //Navbar
@@ -19,6 +18,8 @@ import Signup from "./Components/SignUp/SignUp";
 import FAQ from "./Components/FAQ";
 import Pricing from "./Components/Pricing";
 import Reviews from "./Components/Reviews";
+import About from "./Components/About";
+import Support from "./Components/Support";
 //Dashboard
 import Dashboard from "./Components/User/MainDashboard";
 //CHatBot
@@ -37,7 +38,6 @@ function App() {
               <Home />
               <Information />
               <Tutorial />
-              <Testimonial />
               <Price />
               <JoinUsNow />
             </>
@@ -45,9 +45,11 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/about" element={<About />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/reviews" element={<Reviews />} />
+        <Route path="/support" element={<Support />} />
         <Route path="/users/dashboard/:id" element={<Dashboard />} />
         <Route path="/users/dashboard/:id/batch/:batchId" element={<Dashboard />} />
       </Routes>

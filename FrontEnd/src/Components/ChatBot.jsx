@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { X, MessageCircle, Bot, Circle } from "lucide-react";
 
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
+
 export default function ChatbotWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       role: "bot",
-      text: "Hi, I’m Eval AI 👋. I can help you learn more about our tools and coding education.",
+      text: "Hi, I’m Eval AI. I can help you learn more about our tools and coding education.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -32,7 +34,7 @@ export default function ChatbotWidget() {
     } catch (err) {
       setMessages((prev) => [
         ...prev,
-        { role: "bot", text: "⚠️ Error: Couldn’t reach AI." },
+        { role: "bot", text: "Error — couldn’t reach AI." },
       ]);
     } finally {
       setIsTyping(false);
@@ -45,51 +47,122 @@ export default function ChatbotWidget() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-purple-500 text-white shadow-lg flex items-center justify-center text-xl transition-transform hover:scale-110 hover:shadow-purple-400/50"
+          className="fixed bottom-6 right-6 flex items-center justify-center"
+          style={{
+            width: 56,
+            height: 56,
+            background: "#000000",
+            color: "#ffffff",
+            borderRadius: 9999,
+            border: "2px solid #ffffff",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
+          }}
         >
-          <MessageCircle className="w-7 h-7" />
+          <MessageCircle className="w-6 h-6" />
         </button>
       )}
 
       {/* Chat Window */}
       {open && (
-        <div className="fixed bottom-20 right-6 w-80 h-[440px] bg-white rounded-xl shadow-lg flex flex-col border border-gray-200 overflow-hidden">
+        <div
+          className="fixed bottom-20 right-6 flex flex-col overflow-hidden"
+          style={{
+            width: 360,
+            height: 480,
+            background: "#000000",
+            color: "#ffffff",
+            borderRadius: 20,
+            border: "1px solid #1e2c31",
+            boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)",
+          }}
+        >
           {/* Header */}
-          <div className="p-3 bg-purple-500 text-white flex justify-between items-center font-semibold rounded-t-xl">
+          <div
+            className="flex justify-between items-center"
+            style={{
+              padding: 16,
+              borderBottom: "1px solid #1e2c31",
+            }}
+          >
             <div className="flex items-center gap-2">
               <Bot className="w-5 h-5" />
-              <span>Eval AI</span>
-              <Circle className="w-3 h-3 text-green-400 animate-pulse fill-green-400" />
+              <span
+                style={{
+                  fontFamily: DISPLAY_FONT,
+                  fontSize: 18,
+                  fontWeight: 500,
+                  letterSpacing: "0.72px",
+                  lineHeight: 1.25,
+                }}
+              >
+                Eval AI
+              </span>
+              <Circle
+                className="w-2 h-2"
+                style={{ color: "#c1fbd4", fill: "#c1fbd4" }}
+              />
             </div>
-            <button onClick={() => setOpen(false)}>
+            <button onClick={() => setOpen(false)} style={{ color: "#9dabad" }}>
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4 text-sm bg-white">
+          <div
+            className="flex-1 overflow-y-auto space-y-4"
+            style={{ padding: 16 }}
+          >
             {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "items-start gap-2"}`}>
-                {/* Bot avatar + name */}
+              <div
+                key={i}
+                className={`flex ${
+                  m.role === "user" ? "justify-end" : "items-start gap-2"
+                }`}
+              >
                 {m.role === "bot" && (
-                  <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white">
-                      <Bot className="w-4 h-4" />
-                    </div>
+                  <div
+                    className="flex items-center justify-center flex-shrink-0"
+                    style={{
+                      width: 28,
+                      height: 28,
+                      background: "#0a0a0a",
+                      border: "1px solid #1e2c31",
+                      borderRadius: 9999,
+                      color: "#ffffff",
+                    }}
+                  >
+                    <Bot className="w-3 h-3" />
                   </div>
                 )}
 
-                <div className="flex flex-col max-w-[75%]">
-                  {/* Show Eval AI name above bot messages */}
+                <div className="flex flex-col max-w-[80%]">
                   {m.role === "bot" && (
-                    <span className="text-xs text-gray-500 mb-1 ml-1">Eval AI</span>
+                    <span
+                      style={{
+                        color: "#9dabad",
+                        fontSize: 12,
+                        fontWeight: 400,
+                        letterSpacing: "0.72px",
+                        marginBottom: 4,
+                        marginLeft: 4,
+                      }}
+                    >
+                      EVAL AI
+                    </span>
                   )}
                   <div
-                    className={`px-3 py-2 rounded-xl leading-relaxed ${
-                      m.role === "user"
-                        ? "bg-purple-500 text-white self-end"
-                        : "bg-gray-100 text-gray-900"
-                    }`}
+                    style={{
+                      background:
+                        m.role === "user" ? "#ffffff" : "#0a0a0a",
+                      color: m.role === "user" ? "#000000" : "#ffffff",
+                      border:
+                        m.role === "user" ? "none" : "1px solid #1e2c31",
+                      borderRadius: 20,
+                      padding: "10px 14px",
+                      fontSize: 14,
+                      fontWeight: m.role === "user" ? 550 : 420,
+                      lineHeight: 1.5,
+                    }}
                   >
                     {m.text}
                   </div>
@@ -97,17 +170,43 @@ export default function ChatbotWidget() {
               </div>
             ))}
 
-            {/* Typing Animation */}
             {isTyping && (
               <div className="flex items-start gap-2">
-                <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white">
-                  <Bot className="w-4 h-4" />
+                <div
+                  className="flex items-center justify-center"
+                  style={{
+                    width: 28,
+                    height: 28,
+                    background: "#0a0a0a",
+                    border: "1px solid #1e2c31",
+                    borderRadius: 9999,
+                    color: "#ffffff",
+                  }}
+                >
+                  <Bot className="w-3 h-3" />
                 </div>
-                <div className="bg-gray-100 px-3 py-2 rounded-xl w-20 flex justify-center">
+                <div
+                  style={{
+                    background: "#0a0a0a",
+                    border: "1px solid #1e2c31",
+                    borderRadius: 20,
+                    padding: "10px 14px",
+                    width: 60,
+                  }}
+                >
                   <div className="flex space-x-1">
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></span>
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-150"></span>
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-300"></span>
+                    <span
+                      className="w-1.5 h-1.5 rounded-full animate-bounce"
+                      style={{ background: "#9dabad" }}
+                    />
+                    <span
+                      className="w-1.5 h-1.5 rounded-full animate-bounce"
+                      style={{ background: "#9dabad", animationDelay: "0.15s" }}
+                    />
+                    <span
+                      className="w-1.5 h-1.5 rounded-full animate-bounce"
+                      style={{ background: "#9dabad", animationDelay: "0.3s" }}
+                    />
                   </div>
                 </div>
               </div>
@@ -115,17 +214,40 @@ export default function ChatbotWidget() {
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t border-gray-200 flex space-x-2">
+          <div
+            className="flex gap-2"
+            style={{
+              padding: 12,
+              borderTop: "1px solid #1e2c31",
+            }}
+          >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              className="flex-1 border border-gray-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
               placeholder="Type a message..."
+              style={{
+                flex: 1,
+                background: "#0a0a0a",
+                color: "#ffffff",
+                border: "1px solid #1e2c31",
+                borderRadius: 9999,
+                padding: "10px 16px",
+                fontSize: 14,
+                outline: "none",
+              }}
             />
             <button
               onClick={sendMessage}
-              className="bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600 transition"
+              style={{
+                background: "#ffffff",
+                color: "#000000",
+                borderRadius: 9999,
+                padding: "10px 20px",
+                fontSize: 14,
+                fontWeight: 550,
+                border: "none",
+              }}
             >
               Send
             </button>

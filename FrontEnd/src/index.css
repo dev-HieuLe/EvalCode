@@ -1,1 +1,49 @@
 @import "tailwindcss";
+
+:root {
+  /* Shopifi design tokens */
+  --color-primary: #000000;
+  --color-ink: #000000;
+  --color-on-primary: #ffffff;
+  --color-canvas-night: #000000;
+  --color-canvas-night-elevated: #0a0a0a;
+  --color-canvas-light: #ffffff;
+  --color-canvas-cream: #fbfbf5;
+  --color-surface-elevated-dark: #1e2c31;
+  --color-shade-30: #d4d4d8;
+  --color-shade-40: #a1a1aa;
+  --color-shade-50: #71717a;
+  --color-shade-60: #52525b;
+  --color-shade-70: #3f3f46;
+  --color-hairline-light: #e4e4e7;
+  --color-hairline-dark: #1e2c31;
+  --color-aloe-10: #c1fbd4;
+  --color-pistachio-10: #d4f9e0;
+  --color-link-cool-1: #9dabad;
+  --color-link-cool-2: #9797a2;
+  --color-link-cool-3: #bdbdca;
+  --color-link-mint: #99b3ad;
+
+  --font-display: "Helvetica Now Display", "Inter", "Helvetica", Arial,
+    sans-serif;
+  --font-body: "Inter", "Inter Variable", "Helvetica", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+html,
+body {
+  background: var(--color-canvas-light);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-feature-settings: "ss03";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-feature-settings: "ss03";
+}
+
+button {
+  font-family: var(--font-body);
+}

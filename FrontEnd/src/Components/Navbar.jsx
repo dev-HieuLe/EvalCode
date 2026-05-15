@@ -1,8 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Clover, ArrowUpRight, Menu, X, UserCircle } from "lucide-react";
+import { Menu, X, UserCircle, Clover } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 import axios from "axios";
+
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +24,7 @@ const Navbar = () => {
   const handleLogout = () => {
     axios
       .get(`${import.meta.env.VITE_API_BASE_URL}/logout`, { withCredentials: true })
-      .then((res) => {
+      .then(() => {
         setAuth(false);
         setUser({});
         setWasLoggedInBefore(false);
@@ -34,9 +36,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const handleDirect = async () => {
     try {
-      // First try to get the user
       const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user`, { withCredentials: true });
-
       if (res.data?.id) {
         navigate(`/users/dashboard/${res.data.id}`);
       } else {
@@ -45,17 +45,13 @@ const Navbar = () => {
     } catch (err) {
       if (err.response?.status === 401) {
         try {
-          // Try to refresh the token if not checkAuth()
           const refresh = await axios.post(
             `${import.meta.env.VITE_API_BASE_URL}/refresh-token`,
             {},
             { withCredentials: true }
           );
           if (refresh.data.status === "Success") {
-            //retry
-            const retryRes = await axios.get("/user", {
-              withCredentials: true,
-            });
+            const retryRes = await axios.get("/user", { withCredentials: true });
             if (retryRes.data?.id) {
               navigate(`/users/dashboard/${retryRes.data.id}`);
               return;
@@ -79,85 +75,109 @@ const Navbar = () => {
 
   if (loading) return null;
   return (
-    <nav className="bg-white rounded-2xl md:rounded-full shadow-sm px-3 md:px-6 py-4 md:py-6 max-w-7xl mx-2 md:mx-auto mt-3 md:mt-4 border border-gray-200">
-      <div className="flex items-center justify-between relative">
+    <nav style={{ background: "#000000", color: "#ffffff" }}>
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
         {/* Left: Logo */}
-        <div className="flex-1 flex items-center min-w-0">
-          <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
-            <Clover className="text-green-600 w-8 h-8 md:w-9 md:h-9" />
-            <span className="text-xl md:text-2xl font-semibold text-black">
-              EvalCode
-            </span>
-          </Link>
-        </div>
+        <Link
+          to="/"
+          className="flex items-center gap-2"
+          style={{
+            fontFamily: DISPLAY_FONT,
+            fontWeight: 500,
+            fontSize: 20,
+            letterSpacing: "0.3px",
+            color: "#ffffff",
+          }}
+        >
+          <Clover className="w-6 h-6" style={{ color: "#c1fbd4" }} />
+          EvalCode
+        </Link>
 
         {/* Center: Links */}
-        <div className="flex-1 flex justify-center">
-          <ul className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-800">
-            <li>
-              <Link to="/about" className="nav-link">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/reviews" className="nav-link">
-                Reviews
-              </Link>
-            </li>
-            <li>
-              <Link to="/pricing" className="nav-link">
-                Pricing
-              </Link>
-            </li>
-            <li>
-              <Link to="/faq" className="nav-link">
-                FAQ
-              </Link>
-            </li>
-          </ul>
-        </div>
+        <ul
+          className="hidden md:flex items-center gap-7"
+          style={{ fontSize: 16, fontWeight: 420 }}
+        >
+          <li><Link to="/about" className="nav-link">About</Link></li>
+          <li><Link to="/pricing" className="nav-link">Pricing</Link></li>
+          <li><Link to="/reviews" className="nav-link">Reviews</Link></li>
+          <li><Link to="/faq" className="nav-link">FAQ</Link></li>
+          <li><Link to="/support" className="nav-link">Support</Link></li>
+        </ul>
 
-        {/* Right: Buttons (hidden on mobile) */}
+        {/* Right: Buttons */}
         {!auth ? (
-          <div className="hidden md:flex flex-1 items-center justify-end gap-2">
+          <div className="hidden md:flex items-center gap-3">
             <Link
               to="/login"
-              className="flex items-center gap-2 text-neutral-800 font-medium px-5 py-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 transition text-sm shadow-sm"
-              style={{ minWidth: "80px" }}
+              className="inline-flex items-center"
+              style={{
+                background: "#000000",
+                color: "#ffffff",
+                border: "2px solid #ffffff",
+                borderRadius: 9999,
+                padding: "10px 24px",
+                fontSize: 16,
+                fontWeight: 420,
+              }}
             >
-              Sign In
+              Log in
             </Link>
             <Link
               to="/signup"
-              className="flex items-center gap-2 text-white font-medium px-5 py-2 rounded-xl bg-gradient-to-r from-neutral-800 to-black hover:opacity-90 transition"
+              className="inline-flex items-center"
+              style={{
+                background: "#000000",
+                color: "#ffffff",
+                border: "2px solid #ffffff",
+                borderRadius: 9999,
+                padding: "10px 24px",
+                fontSize: 16,
+                fontWeight: 550,
+              }}
             >
-              <ArrowUpRight size={18} />
-              Get Started
+              Start free trial
             </Link>
           </div>
         ) : (
-          <div className="hidden md:flex flex-1 items-center justify-end gap-2">
+          <div className="hidden md:flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="text-sm font-medium text-neutral-800 px-5 py-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 transition shadow-sm mr-2"
-              style={{ minWidth: "80px" }}
+              style={{
+                background: "#000000",
+                color: "#ffffff",
+                border: "2px solid #ffffff",
+                borderRadius: 9999,
+                padding: "10px 24px",
+                fontSize: 16,
+                fontWeight: 420,
+              }}
             >
               Logout
             </button>
             <button
               onClick={handleDirect}
-              className="flex items-center gap-2 px-5 py-2 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-neutral-800 to-black hover:opacity-90 transition shadow-sm"
+              className="inline-flex items-center gap-2"
+              style={{
+                background: "#ffffff",
+                color: "#000000",
+                borderRadius: 9999,
+                padding: "10px 24px",
+                fontSize: 16,
+                fontWeight: 550,
+              }}
             >
-              <UserCircle className="w-5 h-5 text-white" />
+              <UserCircle className="w-4 h-4" />
               {user.name}
             </button>
           </div>
         )}
 
-        {/* Hamburger Icon for Mobile */}
+        {/* Hamburger */}
         <button
           onClick={toggleMenu}
-          className="md:hidden text-gray-700 focus:outline-none ml-2"
+          className="md:hidden focus:outline-none ml-2"
+          style={{ color: "#ffffff" }}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -165,34 +185,45 @@ const Navbar = () => {
 
       {/* Mobile Dropdown */}
       {isOpen && (
-        <div className="md:hidden mt-3 space-y-3 text-sm font-medium text-gray-800 bg-white rounded-2xl shadow-lg px-4 py-4 border border-gray-200">
-          <Link to="/about" onClick={toggleMenu} className="nav-link block">
-            About
-          </Link>
-          <Link to="/reviews" onClick={toggleMenu} className="nav-link block">
-            Reviews
-          </Link>
-          <Link to="/pricing" onClick={toggleMenu} className="nav-link block">
-            Pricing
-          </Link>
-          <Link to="/faq" onClick={toggleMenu} className="nav-link block">
-            FAQ
-          </Link>
+        <div
+          className="md:hidden px-6 py-6 space-y-4"
+          style={{ background: "#000000", color: "#ffffff", fontSize: 16 }}
+        >
+          <Link to="/about" onClick={toggleMenu} className="nav-link block">About</Link>
+          <Link to="/pricing" onClick={toggleMenu} className="nav-link block">Pricing</Link>
+          <Link to="/reviews" onClick={toggleMenu} className="nav-link block">Reviews</Link>
+          <Link to="/faq" onClick={toggleMenu} className="nav-link block">FAQ</Link>
+          <Link to="/support" onClick={toggleMenu} className="nav-link block">Support</Link>
           <Link
             to="/login"
             onClick={toggleMenu}
-            className="inline-flex items-center gap-2 text-neutral-800 font-medium px-4 py-1.5 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-50 transition text-sm shadow-sm w-full justify-center"
-            style={{ minWidth: "80px" }}
+            className="block text-center"
+            style={{
+              background: "#000000",
+              color: "#ffffff",
+              border: "2px solid #ffffff",
+              borderRadius: 9999,
+              padding: "10px 24px",
+              fontSize: 16,
+            }}
           >
-            Sign In
+            Log in
           </Link>
           <Link
             to="/signup"
             onClick={toggleMenu}
-            className="inline-flex items-center gap-2 text-white font-medium px-5 py-2 rounded-xl bg-gradient-to-r from-neutral-800 to-black hover:opacity-90 transition w-full justify-center"
+            className="block text-center"
+            style={{
+              background: "#000000",
+              color: "#ffffff",
+              border: "2px solid #ffffff",
+              borderRadius: 9999,
+              padding: "10px 24px",
+              fontSize: 16,
+              fontWeight: 550,
+            }}
           >
-            <ArrowUpRight size={18} />
-            Get Clover
+            Start free trial
           </Link>
         </div>
       )}

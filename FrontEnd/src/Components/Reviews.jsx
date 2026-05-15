@@ -1,104 +1,97 @@
-import React from "react";
+import { ArrowRight } from "lucide-react";
+
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
 
 function Reviews() {
-  const testimonials = [
-    {
-      name: "Alice Nguyen",
-      title: "Computer Science Teacher",
-      image: "https://randomuser.me/api/portraits/women/68.jpg",
-      quote:
-        "This platform saves me hours every week! It’s like having a teaching assistant that never sleeps.",
-    },
-    {
-      name: "David Tran",
-      title: "High School STEM Educator",
-      image: "https://randomuser.me/api/portraits/men/44.jpg",
-      quote:
-        "I love how easy it is to adjust the AI grading. My students get great feedback instantly.",
-    },
-    {
-      name: "Emma Lê",
-      title: "Lecturer, Software Engineering",
-      image: "https://randomuser.me/api/portraits/women/79.jpg",
-      quote:
-        "Professional, clean, and incredibly accurate. This tool is now a core part of my workflow.",
-    },
-    {
-      name: "John Smith",
-      title: "CS Instructor",
-      image: "https://randomuser.me/api/portraits/men/60.jpg",
-      quote: "The customizable feedback is remarkable.",
-    },
-    {
-      name: "Sofia Doan",
-      title: "Curriculum Designer",
-      image: "https://randomuser.me/api/portraits/women/52.jpg",
-      quote: "Makes grading consistent and fair, especially in large classes.",
-    },
-    {
-      name: "Mark Chen",
-      title: "Bootcamp Mentor",
-      image: "https://randomuser.me/api/portraits/men/85.jpg",
-      quote: "Exactly what we needed to scale personalized feedback at speed.",
-    },
-    {
-      name: "Rachel Pham",
-      title: "Teaching Assistant",
-      image: "https://randomuser.me/api/portraits/women/33.jpg",
-      quote: "Helps me prepare feedback even before class starts.",
-    },
-    {
-      name: "Tony Vu",
-      title: "Python Course Creator",
-      image: "https://randomuser.me/api/portraits/men/99.jpg",
-      quote: "The score reasoning makes it easy to explain grades to learners.",
-    },
-    {
-      name: "Linda Hoang",
-      title: "Online Instructor",
-      image: "https://randomuser.me/api/portraits/women/45.jpg",
-      quote: "I switched from manual grading to this and never looked back.",
-    },
-  ];
-
   return (
-    <section className="bg-white py-24 px-6 min-h-screen" id="reviews">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <span className="inline-block text-sm uppercase tracking-wider text-blue-600 font-semibold mb-2">
-            User Reviews
-          </span>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-            What Our Users Say
-          </h2>
-          <p className="text-gray-500 text-lg mt-2">
-            See how educators are transforming their grading with EvalAI.
-          </p>
-        </div>
-        <div className="space-y-6">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="border rounded-2xl p-6 bg-gray-50 shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="flex items-center gap-4 mb-2">
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <p className="font-semibold text-gray-900 text-lg">
-                    {testimonial.name}
-                  </p>
-                  <p className="text-sm text-gray-500">{testimonial.title}</p>
-                </div>
-              </div>
-              <div className="text-gray-700 text-base leading-relaxed border-t pt-4 mt-2">
-                “{testimonial.quote}”
-              </div>
-            </div>
-          ))}
+    <section
+      id="reviews"
+      style={{
+        background: "#fbfbf5",
+        color: "#000000",
+        paddingTop: 128,
+        paddingBottom: 128,
+        minHeight: "100vh",
+      }}
+    >
+      <div className="max-w-[1280px] mx-auto px-6 md:px-12">
+        <span
+          className="inline-block uppercase mb-6"
+          style={{
+            fontSize: 12,
+            fontWeight: 400,
+            letterSpacing: "0.72px",
+            color: "#52525b",
+          }}
+        >
+          Reviews
+        </span>
+        <h1
+          className="max-w-3xl"
+          style={{
+            fontFamily: DISPLAY_FONT,
+            fontSize: "clamp(40px, 6vw, 55px)",
+            fontWeight: 330,
+            lineHeight: 1.16,
+          }}
+        >
+          We’re just getting started.
+        </h1>
+        <p
+          className="mt-6 max-w-xl"
+          style={{ fontSize: 18, fontWeight: 550, lineHeight: 1.56 }}
+        >
+          EvalCode is new. We haven’t collected reviews from classrooms yet —
+          we wanted to ship the product to early educators first and let them
+          shape what comes next.
+        </p>
+        <p
+          className="mt-4 max-w-xl"
+          style={{
+            fontSize: 16,
+            fontWeight: 420,
+            lineHeight: 1.5,
+            color: "#52525b",
+          }}
+        >
+          If you’re an educator trying EvalCode, we’d love to hear your
+          honest experience — what works, what doesn’t, and what we should
+          build next.
+        </p>
+
+        <div className="mt-12 flex flex-wrap gap-3">
+          <a
+            href="/signup"
+            className="inline-flex items-center gap-2"
+            style={{
+              background: "#000000",
+              color: "#ffffff",
+              borderRadius: 9999,
+              padding: "12px 24px",
+              fontSize: 16,
+              fontWeight: 550,
+              textDecoration: "none",
+            }}
+          >
+            Start free trial
+            <ArrowRight className="w-4 h-4" />
+          </a>
+          <a
+            href="mailto:hello@evalcode.app"
+            className="inline-flex items-center gap-2"
+            style={{
+              background: "#ffffff",
+              color: "#000000",
+              border: "1px solid #000000",
+              borderRadius: 9999,
+              padding: "12px 24px",
+              fontSize: 16,
+              fontWeight: 550,
+              textDecoration: "none",
+            }}
+          >
+            Send us feedback
+          </a>
         </div>
       </div>
     </section>

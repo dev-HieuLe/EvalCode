@@ -11,6 +11,8 @@ import {
 import axios from "axios";
 import GradingPage from "./Grading";
 
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
+
 const Submissions = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -29,9 +31,10 @@ const Submissions = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}/students`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}/students`,
+          { withCredentials: true }
+        );
         setStudents(res.data || []);
       } catch (err) {
         console.error("Failed to fetch students:", err);
@@ -62,9 +65,10 @@ const Submissions = () => {
 
   const handleDeleteStudent = async (studentId) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}/students/${studentId}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}/students/${studentId}`,
+        { withCredentials: true }
+      );
       setStudents((prev) => prev.filter((s) => s.id !== studentId));
     } catch (err) {
       console.error("Failed to delete student:", err);
@@ -90,30 +94,65 @@ const Submissions = () => {
 
   return (
     <div className="relative">
-      {/* Header + Add Button */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Students</h2>
+        <h2
+          style={{
+            fontFamily: DISPLAY_FONT,
+            fontSize: 24,
+            fontWeight: 400,
+            letterSpacing: "0.36px",
+            lineHeight: 1.14,
+          }}
+        >
+          Students
+        </h2>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md border border-gray-300 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all"
+          className="inline-flex items-center gap-2"
+          style={{
+            background: "#000000",
+            color: "#ffffff",
+            borderRadius: 9999,
+            padding: "10px 20px",
+            fontSize: 14,
+            fontWeight: 550,
+            border: "none",
+            letterSpacing: "0.28px",
+          }}
         >
-          <Plus className="w-5 h-5" />
-          Add Student
+          <Plus className="w-4 h-4" />
+          Add student
         </button>
       </div>
 
-      <p className="text-sm text-gray-500 mb-6">
+      <p
+        className="mb-6"
+        style={{
+          color: "#52525b",
+          fontSize: 14,
+          fontWeight: 500,
+          letterSpacing: "0.28px",
+        }}
+      >
         Select a student to view their submission and provide feedback.
       </p>
 
       {loading ? (
-        <div className="text-gray-500">Loading students...</div>
+        <div style={{ color: "#71717a", fontSize: 14 }}>Loading students...</div>
       ) : error ? (
-        <div className="text-red-500">{error}</div>
+        <div style={{ color: "#dc2626", fontSize: 14 }}>{error}</div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead className="text-gray-500 text-sm border-b border-gray-300">
+            <thead
+              style={{
+                color: "#52525b",
+                fontSize: 13,
+                fontWeight: 500,
+                letterSpacing: "-0.13px",
+                borderBottom: "1px solid #e4e4e7",
+              }}
+            >
               <tr>
                 <th className="py-3">Student</th>
                 <th>Status</th>
@@ -125,40 +164,71 @@ const Submissions = () => {
               {students.map((student) => (
                 <tr
                   key={student.id}
-                  className="border-t border-gray-200 hover:bg-gray-100/40 transition"
+                  style={{
+                    borderTop: "1px solid #e4e4e7",
+                    fontSize: 16,
+                    fontWeight: 420,
+                  }}
                 >
-                  <td className="py-3 font-medium">{student.name}</td>
+                  <td
+                    className="py-3"
+                    style={{ fontWeight: 550, color: "#000000" }}
+                  >
+                    {student.name}
+                  </td>
                   <td>
                     <span
-                      className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full
-                    ${
-                      student.grade == null || student.grade === ""
-                        ? "bg-yellow-100 text-yellow-800" // Awaiting Grade
-                        : "bg-green-100 text-green-800" // Graded
-                    }`}
+                      className="inline-flex items-center gap-1"
+                      style={{
+                        background:
+                          student.grade == null || student.grade === ""
+                            ? "#d4d4d8"
+                            : "#c1fbd4",
+                        color: "#000000",
+                        borderRadius: 9999,
+                        padding: "4px 12px",
+                        fontSize: 12,
+                        fontWeight: 400,
+                        letterSpacing: "0.72px",
+                        textTransform: "uppercase",
+                      }}
                     >
-                      <UserRoundSearch className="w-3.5 h-3.5" />
+                      <UserRoundSearch className="w-3 h-3" />
                       {student.grade == null || student.grade === ""
-                        ? "Awaiting Grade"
+                        ? "Awaiting"
                         : student.status}
                     </span>
                   </td>
 
-                  <td>{student.grade || "N/A"}</td>
+                  <td style={{ color: "#000000" }}>{student.grade || "N/A"}</td>
                   <td className="py-2">
                     <div className="flex gap-2">
                       <button
                         onClick={() => setGradingStudent(student)}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-white/40 border border-gray-300 text-gray-700 rounded-lg backdrop-blur-md shadow-sm hover:shadow-md transition-all"
+                        className="inline-flex items-center gap-2"
+                        style={{
+                          background: "#ffffff",
+                          color: "#000000",
+                          border: "1px solid #000000",
+                          borderRadius: 9999,
+                          padding: "6px 14px",
+                          fontSize: 13,
+                          fontWeight: 550,
+                          letterSpacing: "-0.13px",
+                        }}
                       >
-                        <FileText className="w-4 h-4" />
+                        <FileText className="w-3 h-3" />
                         Grade
                       </button>
                       <button
                         onClick={() => handleDeleteStudent(student.id)}
-                        className="flex items-center gap-2 px-3 py-1.5 text-black rounded-lg hover:text-red-300 transition-all"
+                        style={{
+                          color: "#71717a",
+                          padding: "6px",
+                          borderRadius: 9999,
+                        }}
                       >
-                        <Trash2 className="w-5 h-5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
@@ -166,7 +236,11 @@ const Submissions = () => {
               ))}
               {students.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="py-6 text-center text-gray-500">
+                  <td
+                    colSpan={4}
+                    className="py-6 text-center"
+                    style={{ color: "#71717a", fontSize: 14 }}
+                  >
                     No students yet.
                   </td>
                 </tr>
@@ -178,15 +252,35 @@ const Submissions = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center rounded-xl">
-          <div className="bg-white/70 backdrop-blur-md border border-gray-300 rounded-2xl shadow-xl p-6 w-full max-w-sm space-y-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ background: "rgba(0,0,0,0.5)" }}
+        >
+          <div
+            className="w-full max-w-sm space-y-4"
+            style={{
+              background: "#ffffff",
+              color: "#000000",
+              borderRadius: 20,
+              padding: 32,
+              boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)",
+            }}
+          >
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-800">
-                Add New Student
+              <h3
+                style={{
+                  fontFamily: DISPLAY_FONT,
+                  fontSize: 24,
+                  fontWeight: 400,
+                  letterSpacing: "0.36px",
+                  lineHeight: 1.14,
+                }}
+              >
+                Add new student
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-500 hover:text-black"
+                style={{ color: "#71717a" }}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -197,15 +291,33 @@ const Submissions = () => {
               value={newStudentName}
               onChange={(e) => setNewStudentName(e.target.value)}
               placeholder="Enter student name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{
+                width: "100%",
+                background: "#ffffff",
+                color: "#000000",
+                border: "1px solid #e4e4e7",
+                borderRadius: 8,
+                padding: "10px 12px",
+                fontSize: 16,
+                outline: "none",
+              }}
             />
 
             <button
               onClick={handleAddStudent}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+              className="w-full inline-flex items-center justify-center gap-2"
+              style={{
+                background: "#000000",
+                color: "#ffffff",
+                borderRadius: 9999,
+                padding: "12px 24px",
+                fontSize: 16,
+                fontWeight: 550,
+                border: "none",
+              }}
             >
               <Check className="w-4 h-4" />
-              Add Student
+              Add student
             </button>
           </div>
         </div>

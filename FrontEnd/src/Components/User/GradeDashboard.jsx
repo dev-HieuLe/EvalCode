@@ -1,25 +1,32 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { FileText, Settings } from "lucide-react";
 import Submissions from "./Main/Submission";
 import Configuration from "./Main/Configuration";
-import { useParams } from "react-router-dom";
 import axios from "axios";
+
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
 
 const GradingDashboard = ({ batchId }) => {
   const [activeTab, setActiveTab] = useState("submissions");
   if (!batchId) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500">
+      <div
+        className="flex items-center justify-center h-full"
+        style={{ color: "#71717a", fontSize: 16 }}
+      >
         Please create or select a batch to start grading.
       </div>
     );
   }
   const handleExport = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/export/${batchId}`, {
-        responseType: "blob",
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/export/${batchId}`,
+        {
+          responseType: "blob",
+          withCredentials: true,
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
@@ -34,25 +41,63 @@ const GradingDashboard = ({ batchId }) => {
     }
   };
   return (
-    <div className="min-h-screen bg-white text-gray-900 px-4 py-10">
-      <div className="max-w-5xl mx-auto space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-600 via-pink-500 via-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-600 text-transparent bg-clip-text bg-[length:200%] animate-gradient">
-          AI Code Grading Assistant
+    <div
+      style={{
+        background: "#fbfbf5",
+        color: "#000000",
+        minHeight: "100vh",
+      }}
+    >
+      <div className="max-w-5xl mx-auto">
+        <span
+          className="inline-block uppercase mb-4"
+          style={{
+            fontSize: 12,
+            fontWeight: 400,
+            letterSpacing: "0.72px",
+            color: "#52525b",
+          }}
+        >
+          AI Grading
+        </span>
+        <h1
+          style={{
+            fontFamily: DISPLAY_FONT,
+            fontSize: 48,
+            fontWeight: 330,
+            lineHeight: 1.14,
+          }}
+        >
+          Grade smarter.
         </h1>
-        <p className="text-gray-600 max-w-2xl mb-4">
-          Upload or enter students' work, configure grading, and get AI-powered
-          feedback.
+        <p
+          className="mt-3 max-w-2xl"
+          style={{
+            color: "#52525b",
+            fontSize: 16,
+            fontWeight: 420,
+            lineHeight: 1.5,
+          }}
+        >
+          Upload or enter students' work, configure grading, and get
+          AI-powered feedback.
         </p>
 
-        {/* Tab Navigation */}
-        <div className="flex gap-2 mb-6">
+        {/* Tabs */}
+        <div className="flex gap-2 mt-8">
           <button
             onClick={() => setActiveTab("submissions")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl ${
-              activeTab === "submissions"
-                ? "bg-white/40 border border-gray-300 text-gray-800 shadow-sm"
-                : "text-gray-500 hover:text-gray-800 border border-transparent"
-            } backdrop-blur-md transition`}
+            className="inline-flex items-center gap-2"
+            style={{
+              background: activeTab === "submissions" ? "#000000" : "#ffffff",
+              color: activeTab === "submissions" ? "#ffffff" : "#000000",
+              border: "1px solid #000000",
+              borderRadius: 9999,
+              padding: "10px 20px",
+              fontSize: 14,
+              fontWeight: 550,
+              letterSpacing: "0.28px",
+            }}
           >
             <FileText className="w-4 h-4" />
             Submissions
@@ -60,26 +105,51 @@ const GradingDashboard = ({ batchId }) => {
 
           <button
             onClick={() => setActiveTab("configuration")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl ${
-              activeTab === "configuration"
-                ? "bg-white/40 border border-gray-300 text-gray-800 shadow-sm"
-                : "text-gray-500 hover:text-gray-800 border border-transparent"
-            } backdrop-blur-md transition`}
+            className="inline-flex items-center gap-2"
+            style={{
+              background: activeTab === "configuration" ? "#000000" : "#ffffff",
+              color: activeTab === "configuration" ? "#ffffff" : "#000000",
+              border: "1px solid #000000",
+              borderRadius: 9999,
+              padding: "10px 20px",
+              fontSize: 14,
+              fontWeight: 550,
+              letterSpacing: "0.28px",
+            }}
           >
             <Settings className="w-4 h-4" />
             Configuration
           </button>
         </div>
 
-        <div className="bg-white/60 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-6">
+        <div
+          className="mt-6"
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e4e4e7",
+            borderRadius: 12,
+            padding: 32,
+            boxShadow:
+              "0 8px 8px rgba(0,0,0,0.06), 0 4px 4px rgba(0,0,0,0.06), 0 2px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.06)",
+          }}
+        >
           {activeTab === "submissions" ? <Submissions /> : <Configuration />}
         </div>
-        {/* Export button */}
+
         <button
           onClick={handleExport}
-          className="mt-10 px-5 py-2.5 rounded-xl bg-gradient-to-r border border-gray-200 from-green-400 to-emerald-400 text-white font-semibold hover:from-green-600 hover:to-emerald-500 hover:shadow-sm transition-transform duration-200 hover:-translate-y-0.5"
+          className="mt-10"
+          style={{
+            background: "#c1fbd4",
+            color: "#000000",
+            borderRadius: 9999,
+            padding: "12px 24px",
+            fontSize: 16,
+            fontWeight: 550,
+            border: "none",
+          }}
         >
-          Export PDF Report
+          Export PDF report
         </button>
       </div>
     </div>

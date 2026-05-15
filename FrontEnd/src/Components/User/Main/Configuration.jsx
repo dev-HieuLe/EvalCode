@@ -2,6 +2,29 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
+
+const inputStyle = {
+  width: "100%",
+  background: "#ffffff",
+  color: "#000000",
+  border: "1px solid #e4e4e7",
+  borderRadius: 8,
+  padding: "10px 12px",
+  fontSize: 16,
+  fontWeight: 420,
+  outline: "none",
+};
+
+const labelStyle = {
+  display: "block",
+  marginBottom: 6,
+  fontSize: 14,
+  fontWeight: 500,
+  letterSpacing: "0.28px",
+  color: "#000000",
+};
+
 const Configuration = () => {
   const { batchId } = useParams();
 
@@ -15,13 +38,13 @@ const Configuration = () => {
     total_points: "",
   });
 
-  // Fetch existing config
   useEffect(() => {
     const fetchConfig = async () => {
       try {
         const res = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`,
-        { withCredentials: true });
+          `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`,
+          { withCredentials: true }
+        );
         if (res.data) {
           setConfig({
             title: res.data.title || "",
@@ -35,7 +58,7 @@ const Configuration = () => {
       } catch (err) {
         console.error("Error fetching config:", err);
       } finally {
-        setLoading(false); // ✅ done fetching
+        setLoading(false);
       }
     };
     fetchConfig();
@@ -48,142 +71,156 @@ const Configuration = () => {
   const handleSave = async () => {
     try {
       await axios.put(
-      `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`,
-      config,
-      { withCredentials: true }
-    );
-      alert("Configuration saved successfully!");
+        `${import.meta.env.VITE_API_BASE_URL}/batches/${batchId}`,
+        config,
+        { withCredentials: true }
+      );
+      alert("Configuration saved successfully.");
     } catch (err) {
       console.error("Error saving config:", err);
       alert("Failed to save configuration");
     }
   };
 
-  // ⏳ Show spinner while loading
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+      <div
+        className="min-h-[300px] flex items-center justify-center"
+        style={{ color: "#71717a", fontSize: 14 }}
+      >
+        <div
+          className="w-8 h-8 rounded-full animate-spin"
+          style={{
+            border: "2px solid #e4e4e7",
+            borderTopColor: "#000000",
+          }}
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 px-4 py-10">
-      <div className="max-w-5xl mx-auto space-y-6">
-        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-600 via-pink-500 via-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-600 text-transparent bg-clip-text bg-[length:200%] animate-gradient">
-          Assignment Configuration
-        </h1>
+    <div style={{ color: "#000000" }}>
+      <h2
+        style={{
+          fontFamily: DISPLAY_FONT,
+          fontSize: 24,
+          fontWeight: 400,
+          letterSpacing: "0.36px",
+          lineHeight: 1.14,
+        }}
+      >
+        Assignment configuration
+      </h2>
+      <p
+        className="mt-2 mb-8"
+        style={{
+          color: "#52525b",
+          fontSize: 14,
+          fontWeight: 500,
+          letterSpacing: "0.28px",
+        }}
+      >
+        Customize how AI grades and gives feedback for this batch.
+      </p>
 
-        <div className="bg-white/60 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-6 space-y-6">
-          {/* Assignment Title */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Assignment Title
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={config.title}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/50 backdrop-blur-md border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Enter assignment title"
-            />
-          </div>
+      <div className="space-y-6">
+        <div>
+          <label style={labelStyle}>Assignment title</label>
+          <input
+            type="text"
+            name="title"
+            value={config.title}
+            onChange={handleChange}
+            style={inputStyle}
+            placeholder="Enter assignment title"
+          />
+        </div>
 
-          {/* Assignment Instructions */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Assignment Instructions
-            </label>
-            <textarea
-              rows={4}
-              name="instructions"
-              value={config.instructions}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/50 backdrop-blur-md border border-gray-300 rounded-lg shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Enter instructions for the assignment"
-            />
-          </div>
+        <div>
+          <label style={labelStyle}>Assignment instructions</label>
+          <textarea
+            rows={4}
+            name="instructions"
+            value={config.instructions}
+            onChange={handleChange}
+            style={{ ...inputStyle, resize: "none" }}
+            placeholder="Enter instructions for the assignment"
+          />
+        </div>
 
-          {/* Grading Criteria */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Grading Criteria
-            </label>
-            <textarea
-              rows={3}
-              name="grading_criteria"
-              value={config.grading_criteria}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/50 backdrop-blur-md border border-gray-300 rounded-lg shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="e.g., Code correctness, readability, and efficiency"
-            />
-          </div>
+        <div>
+          <label style={labelStyle}>Grading criteria</label>
+          <textarea
+            rows={3}
+            name="grading_criteria"
+            value={config.grading_criteria}
+            onChange={handleChange}
+            style={{ ...inputStyle, resize: "none" }}
+            placeholder="e.g., Code correctness, readability, and efficiency"
+          />
+        </div>
 
-          {/* Language */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Language
-            </label>
-            <select
-              name="language"
-              value={config.language}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/50 backdrop-blur-md border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="">Select a language</option>
-              <option value="python">Python</option>
-              <option value="javascript">JavaScript</option>
-              <option value="java">Java</option>
-              <option value="c++">C++</option>
-              <option value="c">C</option>
-            </select>
-          </div>
+        <div>
+          <label style={labelStyle}>Language</label>
+          <select
+            name="language"
+            value={config.language}
+            onChange={handleChange}
+            style={inputStyle}
+          >
+            <option value="">Select a language</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="java">Java</option>
+            <option value="c++">C++</option>
+            <option value="c">C</option>
+          </select>
+        </div>
 
-          {/* Feedback Tone */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Feedback Tone
-            </label>
-            <select
-              name="feedback_tone"
-              value={config.feedback_tone}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/50 backdrop-blur-md border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="">Select feedback tone</option>
-              <option value="friendly">Friendly</option>
-              <option value="formal">Formal</option>
-              <option value="constructive">Constructive</option>
-              <option value="encouraging">Encouraging</option>
-            </select>
-          </div>
+        <div>
+          <label style={labelStyle}>Feedback tone</label>
+          <select
+            name="feedback_tone"
+            value={config.feedback_tone}
+            onChange={handleChange}
+            style={inputStyle}
+          >
+            <option value="">Select feedback tone</option>
+            <option value="friendly">Friendly</option>
+            <option value="formal">Formal</option>
+            <option value="constructive">Constructive</option>
+            <option value="encouraging">Encouraging</option>
+          </select>
+        </div>
 
-          {/* Total Points */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Total Points
-            </label>
-            <input
-              type="number"
-              name="total_points"
-              value={config.total_points}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/50 backdrop-blur-md border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="e.g., 100"
-            />
-          </div>
+        <div>
+          <label style={labelStyle}>Total points</label>
+          <input
+            type="number"
+            name="total_points"
+            value={config.total_points}
+            onChange={handleChange}
+            style={inputStyle}
+            placeholder="e.g., 100"
+          />
+        </div>
 
-          {/* Save Button */}
-          <div className="flex justify-end">
-            <button
-              onClick={handleSave}
-              className="px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              Save Changes
-            </button>
-          </div>
+        <div className="flex justify-end">
+          <button
+            onClick={handleSave}
+            style={{
+              background: "#000000",
+              color: "#ffffff",
+              borderRadius: 9999,
+              padding: "12px 24px",
+              fontSize: 16,
+              fontWeight: 550,
+              border: "none",
+            }}
+          >
+            Save changes
+          </button>
         </div>
       </div>
     </div>

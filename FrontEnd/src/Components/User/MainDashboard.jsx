@@ -122,22 +122,23 @@ const Dashboard = () => {
     }
   };
 
-  // Loading UI
   if (loading || fetching) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-500">Loading dashboard...</p>
+      <div
+        className="flex items-center justify-center h-screen"
+        style={{ background: "#fbfbf5", color: "#71717a", fontSize: 16 }}
+      >
+        <p>Loading dashboard...</p>
       </div>
     );
   }
 
-  // Auth guard
   if (!auth) return <Navigate to="/" replace />;
   if (parseInt(user.id, 10) !== parseInt(id, 10))
     return <Navigate to="/" replace />;
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen" style={{ background: "#fbfbf5" }}>
       <Sidebar
         batches={batches}
         loadingBatches={fetching}
@@ -145,10 +146,16 @@ const Dashboard = () => {
         onDeleteBatch={handleDeleteBatch}
       />
 
-      <main className="flex-1 overflow-y-auto bg-white p-6">
+      <main
+        className="flex-1 overflow-y-auto"
+        style={{ background: "#fbfbf5", color: "#000000", padding: 32 }}
+      >
         {batches.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            No batches yet. Click "New Grading" to create your first batch.
+          <div
+            className="flex items-center justify-center h-full"
+            style={{ color: "#71717a", fontSize: 16 }}
+          >
+            No batches yet. Click "New grading" to create your first batch.
           </div>
         ) : (
           <GradingDashboard batchId={batchId} />

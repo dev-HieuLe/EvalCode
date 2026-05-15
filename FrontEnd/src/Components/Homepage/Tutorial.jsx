@@ -1,78 +1,161 @@
-// HowItWorksSection.jsx
-import React from "react";
-import { ClipboardCheck, Sliders, Sparkles } from "lucide-react";
+import {
+  ClipboardCheck,
+  Sliders,
+  Sparkles,
+  ArrowRight,
+} from "lucide-react";
+
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
+
+const steps = [
+  {
+    number: "01",
+    icon: ClipboardCheck,
+    title: "Paste student code",
+    description:
+      "Drop a submission into the grading workspace. Plain text, file upload, or paste from anywhere — we keep your formatting.",
+  },
+  {
+    number: "02",
+    icon: Sliders,
+    title: "Choose your grading style",
+    description:
+      "Set the rubric, the tone, and the depth of feedback. Score-only, comment-only, or full rewrite suggestions — your call.",
+  },
+  {
+    number: "03",
+    icon: Sparkles,
+    title: "Review the AI feedback",
+    description:
+      "Get structured, rubric-aligned feedback in seconds. Edit, finalize, and send — every grade is yours, AI just does the draft.",
+  },
+];
 
 const Tutorial = () => {
-  const steps = [
-    {
-      icon: <ClipboardCheck className="w-6 h-6 text-blue-600" />,
-      title: "Paste Student Code",
-      description:
-        "Copy and paste student code into the AI-powered grading interface.",
-    },
-    {
-      icon: <Sliders className="w-6 h-6 text-purple-600" />,
-      title: "Select Grading Style",
-      description:
-        "Customize AI output: score-only, feedback-only, or full correction suggestions.",
-    },
-    {
-      icon: <Sparkles className="w-6 h-6 text-green-600" />,
-      title: "Receive AI Feedback",
-      description: "Get structured, readable scoring and feedback in seconds.",
-    },
-  ];
-
   return (
     <section
-      className="relative bg-white py-20 px-4 md:px-8 overflow-hidden"
       id="how-it-works"
+      style={{
+        background: "#000000",
+        color: "#ffffff",
+        paddingTop: 128,
+        paddingBottom: 128,
+      }}
     >
-      {/* Decorative blurred rainbow gradient circles */}
-      <div className="absolute top-24 -left-29 w-80 h-80 bg-gradient-to-br from-pink-600 via-blue-500 to-purple-400 opacity-22 rounded-full blur-3xl z-0 pointer-events-none" />
-      <div className="absolute bottom-24 -right-20 w-72 h-72 bg-gradient-to-tr from-yellow-300 via-green-300 to-purple-500 opacity-21 rounded-full blur-3xl z-0 pointer-events-none" />
-      <div className="max-w-4xl mx-auto text-center mb-14 relative z-10">
-        <h2 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight">
-          How It Works
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12">
+        <span
+          data-aos="fade-down"
+          data-aos-duration="600"
+          className="inline-flex items-center gap-2 uppercase mb-6"
+          style={{
+            color: "#9dabad",
+            fontSize: 12,
+            fontWeight: 400,
+            letterSpacing: "0.72px",
+          }}
+        >
+          <Sparkles className="w-3.5 h-3.5" style={{ color: "#c1fbd4" }} />
+          How it works
+        </span>
+
+        <h2
+          data-aos="fade-up-right"
+          data-aos-duration="900"
+          className="max-w-5xl"
+          style={{
+            fontFamily: DISPLAY_FONT,
+            fontSize: "clamp(48px, 7vw, 70px)",
+            fontWeight: 330,
+            lineHeight: 1.0,
+            color: "#ffffff",
+          }}
+        >
+          From submission to feedback in three steps.
         </h2>
-        <p className="text-gray-600 text-lg md:text-xl max-w-xl mx-auto">
-          Start grading code with AI in just three simple and powerful steps.
-        </p>
-      </div>
 
-      <div className="relative max-w-4xl mx-auto z-10">
-        <div className="relative z-10 grid grid-cols-1 gap-7 md:gap-9">
-          {steps.map((step, index) => (
-            <div
-              key={index}
-              className={`relative flex flex-col md:flex-row items-center md:items-start gap-5 md:gap-8 ${
-                index % 2 === 1 ? "md:flex-row-reverse" : ""
-              }`}
-            >
-              <div className="relative z-10 flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-white shadow-xl border-2 border-blue-100">
-                {step.icon}
-              </div>
-
-              <div className="relative z-10 bg-white/90 backdrop-blur-md p-5 md:p-7 rounded-2xl shadow-xl w-full md:w-[70%] border border-blue-100 hover:shadow-2xl transition-all duration-300">
-                <h3 className="text-lg md:text-xl font-bold mb-2 text-gray-800">
-                  Step {index + 1}: {step.title}
+        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {steps.map((step, i) => {
+            const Icon = step.icon;
+            return (
+              <div
+                key={i}
+                data-aos="flip-up"
+                data-aos-delay={140 * i}
+                data-aos-duration="800"
+                style={{
+                  background: "#0a0a0a",
+                  color: "#ffffff",
+                  borderRadius: 12,
+                  padding: 32,
+                  border: "1px solid #1e2c31",
+                  boxShadow:
+                    "0 1px 2px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.04)",
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <div
+                    style={{
+                      fontFamily: DISPLAY_FONT,
+                      color: "#9dabad",
+                      fontSize: 48,
+                      fontWeight: 330,
+                      lineHeight: 1.14,
+                    }}
+                  >
+                    {step.number}
+                  </div>
+                  <div
+                    className="flex items-center justify-center"
+                    style={{
+                      width: 44,
+                      height: 44,
+                      background: "#c1fbd4",
+                      borderRadius: 9999,
+                      color: "#000000",
+                    }}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </div>
+                <h3
+                  className="mt-6"
+                  style={{
+                    fontFamily: DISPLAY_FONT,
+                    fontSize: 24,
+                    fontWeight: 400,
+                    letterSpacing: "0.36px",
+                    lineHeight: 1.14,
+                  }}
+                >
+                  {step.title}
                 </h3>
-                <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+                <p
+                  className="mt-4"
+                  style={{
+                    color: "#a1a1aa",
+                    fontSize: 16,
+                    fontWeight: 420,
+                    lineHeight: 1.5,
+                  }}
+                >
                   {step.description}
                 </p>
+                <div
+                  className="mt-6 inline-flex items-center gap-1"
+                  style={{
+                    color: "#c1fbd4",
+                    fontSize: 13,
+                    fontWeight: 500,
+                    letterSpacing: "-0.13px",
+                  }}
+                >
+                  Step {i + 1}
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-      </div>
-
-      <div className="text-center mt-14 md:mt-18 relative z-10">
-        <button
-          className="bg-black text-white text-base md:text-lg px-8 md:px-10 py-3 md:py-4 rounded-3xl shadow-xl hover:bg-gray-800 hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-          aria-label="Try EvalAI now"
-        >
-          🚀 Try It Now
-        </button>
       </div>
     </section>
   );

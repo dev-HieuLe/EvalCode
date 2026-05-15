@@ -3,24 +3,21 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../Context/AuthContext";
 
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
+
 const Login = () => {
   const navigate = useNavigate();
   const { setAuth, setUser } = useContext(AuthContext);
 
-  // Form state
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // Clear error on typing
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // Validate before submit
   const validateForm = () => {
     const newErrors = {};
     if (!formData.email.trim()) newErrors.email = "Email is required";
@@ -28,7 +25,6 @@ const Login = () => {
     return newErrors;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
@@ -39,9 +35,11 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/login`, formData, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/login`,
+        formData,
+        { withCredentials: true }
+      );
 
       if (res.data.status === "Success") {
         setAuth(true);
@@ -66,80 +64,151 @@ const Login = () => {
     }
   };
 
-  // Dynamic input class
-  const inputClass = (field) =>
-    `w-full px-4 py-2 rounded-lg border ${
-      errors[field] ? "border-red-500" : "border-gray-300"
-    } bg-gray-100 focus:outline-none focus:ring-2 ${
-      errors[field] ? "focus:ring-red-500" : "focus:ring-black"
-    }`;
+  const inputStyle = (field) => ({
+    width: "100%",
+    background: "#ffffff",
+    color: "#000000",
+    border: `1px solid ${errors[field] ? "#dc2626" : "#e4e4e7"}`,
+    borderRadius: 8,
+    padding: "10px 12px",
+    fontSize: 16,
+    fontWeight: 420,
+    outline: "none",
+  });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="flex w-full max-w-6xl shadow-2xl rounded-3xl overflow-hidden bg-white">
-        {/* Left Image Section */}
-        <div className="hidden md:block md:w-1/2">
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#fbfbf5",
+        color: "#000000",
+        paddingTop: 48,
+        paddingBottom: 48,
+      }}
+      className="flex items-center justify-center px-4"
+    >
+      <div
+        className="flex w-full max-w-6xl overflow-hidden"
+        style={{
+          background: "#ffffff",
+          borderRadius: 20,
+          boxShadow:
+            "0 8px 8px rgba(0,0,0,0.06), 0 4px 4px rgba(0,0,0,0.06), 0 2px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.06)",
+        }}
+      >
+        {/* Left Image */}
+        <div className="hidden md:block md:w-1/2" style={{ background: "#000000" }}>
           <img
             src="/login.jpg"
-            alt="Login Visual"
+            alt="Login visual"
             className="h-full w-full object-cover"
           />
         </div>
 
-        {/* Right Form Section */}
+        {/* Right Form */}
         <div className="w-full md:w-1/2 p-10 md:p-14">
-          {/* Header */}
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Brand</h1>
-          <p className="text-gray-500 text-sm mb-8">Welcome back!</p>
+          <h1
+            style={{
+              fontFamily: DISPLAY_FONT,
+              fontSize: 48,
+              fontWeight: 330,
+              lineHeight: 1.14,
+            }}
+          >
+            Welcome back.
+          </h1>
+          <p
+            className="mt-2"
+            style={{ color: "#52525b", fontSize: 16, fontWeight: 420, lineHeight: 1.5 }}
+          >
+            Log in to your EvalCode workspace.
+          </p>
 
-          {/* Google Login */}
-          <button className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition mb-6">
+          {/* Google */}
+          <button
+            className="w-full flex items-center justify-center gap-3 mt-8"
+            style={{
+              background: "#ffffff",
+              color: "#000000",
+              border: "1px solid #000000",
+              borderRadius: 9999,
+              padding: "12px 24px",
+              fontSize: 16,
+              fontWeight: 420,
+            }}
+          >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
               alt="Google"
               className="w-5 h-5"
             />
-            <span className="font-medium text-sm text-gray-700">
-              Sign in with Google
-            </span>
+            Sign in with Google
           </button>
 
-          {/* Divider */}
           <div className="flex items-center my-6">
-            <div className="flex-grow h-px bg-gray-200" />
-            <span className="px-4 text-sm text-gray-400">
-              OR LOGIN WITH EMAIL
+            <div className="flex-grow h-px" style={{ background: "#e4e4e7" }} />
+            <span
+              className="px-4 uppercase"
+              style={{
+                color: "#71717a",
+                fontSize: 12,
+                fontWeight: 400,
+                letterSpacing: "0.72px",
+              }}
+            >
+              Or login with email
             </span>
-            <div className="flex-grow h-px bg-gray-200" />
+            <div className="flex-grow h-px" style={{ background: "#e4e4e7" }} />
           </div>
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
+              <label
+                style={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  letterSpacing: "0.28px",
+                  display: "block",
+                  marginBottom: 6,
+                }}
+              >
+                Email address
               </label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={inputClass("email")}
+                style={inputStyle("email")}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                <p style={{ color: "#dc2626", fontSize: 13, marginTop: 4 }}>
+                  {errors.email}
+                </p>
               )}
             </div>
 
-            {/* Password */}
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-sm font-medium text-gray-700">
+              <div className="flex justify-between items-center mb-2">
+                <label
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 500,
+                    letterSpacing: "0.28px",
+                  }}
+                >
                   Password
                 </label>
-                <a href="#" className="text-sm text-gray-500 hover:underline">
-                  Forgot Password?
+                <a
+                  href="#"
+                  style={{
+                    color: "#52525b",
+                    fontSize: 13,
+                    fontWeight: 500,
+                    letterSpacing: "-0.13px",
+                  }}
+                >
+                  Forgot password?
                 </a>
               </div>
               <input
@@ -147,27 +216,42 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={inputClass("password")}
+                style={inputStyle("password")}
               />
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                <p style={{ color: "#dc2626", fontSize: 13, marginTop: 4 }}>
+                  {errors.password}
+                </p>
               )}
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-3 bg-black text-white rounded-lg font-semibold text-sm hover:bg-gray-900 transition"
+              className="w-full"
+              style={{
+                background: "#000000",
+                color: "#ffffff",
+                borderRadius: 9999,
+                padding: "12px 24px",
+                fontSize: 16,
+                fontWeight: 550,
+                border: "none",
+              }}
             >
-              Login
+              Log in
             </button>
           </form>
 
-          {/* Footer */}
-          <p className="text-center text-sm text-gray-500 mt-6">
-            OR{" "}
-            <Link to="/signup" className="text-black font-medium hover:underline">
-              SIGN UP
+          <p
+            className="text-center mt-6"
+            style={{ color: "#52525b", fontSize: 14, fontWeight: 500, letterSpacing: "0.28px" }}
+          >
+            Don’t have an account?{" "}
+            <Link
+              to="/signup"
+              style={{ color: "#000000", fontWeight: 550, textDecoration: "underline" }}
+            >
+              Sign up
             </Link>
           </p>
         </div>

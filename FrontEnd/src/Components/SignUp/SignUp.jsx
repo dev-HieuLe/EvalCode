@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 
+const DISPLAY_FONT = `"Helvetica Now Display", "Inter", "Helvetica", Arial, sans-serif`;
+
 const Signup = () => {
   const [users, setUsers] = useState({
     name: "",
@@ -18,8 +20,6 @@ const Signup = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUsers((prev) => ({ ...prev, [name]: value }));
-
-    // Clear error message when user starts typing
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -75,109 +75,227 @@ const Signup = () => {
       });
   };
 
-  const inputClass = (field) =>
-    `w-full px-4 py-2 rounded-lg border ${errors[field] ? "border-red-500" : "border-gray-300"} bg-gray-100 focus:outline-none focus:ring-2 ${
-      errors[field] ? "focus:ring-red-500" : "focus:ring-black"
-    }`;
+  const inputStyle = (field) => ({
+    width: "100%",
+    background: "#ffffff",
+    color: "#000000",
+    border: `1px solid ${errors[field] ? "#dc2626" : "#e4e4e7"}`,
+    borderRadius: 8,
+    padding: "10px 12px",
+    fontSize: 16,
+    fontWeight: 420,
+    outline: "none",
+  });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="flex w-full max-w-6xl shadow-2xl rounded-3xl overflow-hidden bg-white">
-        <div className="hidden md:block md:w-1/2">
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#fbfbf5",
+        color: "#000000",
+        paddingTop: 48,
+        paddingBottom: 48,
+      }}
+      className="flex items-center justify-center px-4"
+    >
+      <div
+        className="flex w-full max-w-6xl overflow-hidden"
+        style={{
+          background: "#ffffff",
+          borderRadius: 20,
+          boxShadow:
+            "0 8px 8px rgba(0,0,0,0.06), 0 4px 4px rgba(0,0,0,0.06), 0 2px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.06)",
+        }}
+      >
+        <div className="hidden md:block md:w-1/2" style={{ background: "#000000" }}>
           <img
             src="/login.jpg"
-            alt="Signup Visual"
+            alt="Signup visual"
             className="h-full w-full object-cover"
-            style={{ minHeight: "400px", maxHeight: "600px" }}
+            style={{ minHeight: "400px", maxHeight: "640px" }}
           />
         </div>
 
         <div className="w-full md:w-1/2 p-10 md:p-14">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
-          <p className="text-gray-500 text-sm mb-8">Join us and start your journey.</p>
+          <h1
+            style={{
+              fontFamily: DISPLAY_FONT,
+              fontSize: 48,
+              fontWeight: 330,
+              lineHeight: 1.14,
+            }}
+          >
+            Start free trial.
+          </h1>
+          <p
+            className="mt-2"
+            style={{ color: "#52525b", fontSize: 16, fontWeight: 420, lineHeight: 1.5 }}
+          >
+            Join us and start your journey.
+          </p>
 
-          <button className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition mb-6">
+          <button
+            className="w-full flex items-center justify-center gap-3 mt-8"
+            style={{
+              background: "#ffffff",
+              color: "#000000",
+              border: "1px solid #000000",
+              borderRadius: 9999,
+              padding: "12px 24px",
+              fontSize: 16,
+              fontWeight: 420,
+            }}
+          >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
               alt="Google"
               className="w-5 h-5"
             />
-            <span className="font-medium text-sm text-gray-700">Sign up with Google</span>
+            Sign up with Google
           </button>
 
           <div className="flex items-center my-6">
-            <div className="flex-grow h-px bg-gray-200" />
-            <span className="px-4 text-sm text-gray-400">OR SIGN UP WITH EMAIL</span>
-            <div className="flex-grow h-px bg-gray-200" />
+            <div className="flex-grow h-px" style={{ background: "#e4e4e7" }} />
+            <span
+              className="px-4 uppercase"
+              style={{
+                color: "#71717a",
+                fontSize: 12,
+                fontWeight: 400,
+                letterSpacing: "0.72px",
+              }}
+            >
+              Or sign up with email
+            </span>
+            <div className="flex-grow h-px" style={{ background: "#e4e4e7" }} />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label
+                style={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  letterSpacing: "0.28px",
+                  display: "block",
+                  marginBottom: 6,
+                }}
+              >
+                Name
+              </label>
               <input
                 type="text"
                 name="name"
                 value={users.name}
                 onChange={handleChange}
-                className={inputClass("name")}
+                style={inputStyle("name")}
               />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+              {errors.name && (
+                <p style={{ color: "#dc2626", fontSize: 13, marginTop: 4 }}>{errors.name}</p>
+              )}
             </div>
 
-            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <label
+                style={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  letterSpacing: "0.28px",
+                  display: "block",
+                  marginBottom: 6,
+                }}
+              >
+                Email address
+              </label>
               <input
                 type="email"
                 name="email"
                 value={users.email}
                 onChange={handleChange}
-                className={inputClass("email")}
+                style={inputStyle("email")}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p style={{ color: "#dc2626", fontSize: 13, marginTop: 4 }}>{errors.email}</p>
+              )}
             </div>
 
-            {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label
+                style={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  letterSpacing: "0.28px",
+                  display: "block",
+                  marginBottom: 6,
+                }}
+              >
+                Password
+              </label>
               <input
                 type="password"
                 name="password"
                 value={users.password}
                 onChange={handleChange}
-                className={inputClass("password")}
+                style={inputStyle("password")}
               />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+              {errors.password && (
+                <p style={{ color: "#dc2626", fontSize: 13, marginTop: 4 }}>{errors.password}</p>
+              )}
             </div>
 
-            {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+              <label
+                style={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  letterSpacing: "0.28px",
+                  display: "block",
+                  marginBottom: 6,
+                }}
+              >
+                Confirm password
+              </label>
               <input
                 type="password"
                 name="confirmPassword"
                 value={users.confirmPassword}
                 onChange={handleChange}
-                className={inputClass("confirmPassword")}
+                style={inputStyle("confirmPassword")}
               />
               {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+                <p style={{ color: "#dc2626", fontSize: 13, marginTop: 4 }}>
+                  {errors.confirmPassword}
+                </p>
               )}
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 bg-black text-white rounded-lg font-semibold text-sm hover:bg-gray-900 transition"
+              className="w-full"
+              style={{
+                background: "#c1fbd4",
+                color: "#000000",
+                borderRadius: 9999,
+                padding: "12px 24px",
+                fontSize: 16,
+                fontWeight: 550,
+                border: "none",
+              }}
             >
-              Sign Up
+              Start free trial
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p
+            className="text-center mt-6"
+            style={{ color: "#52525b", fontSize: 14, fontWeight: 500, letterSpacing: "0.28px" }}
+          >
             Already have an account?{" "}
-            <a href="/login" className="text-black font-medium hover:underline">
-              Login
+            <a
+              href="/login"
+              style={{ color: "#000000", fontWeight: 550, textDecoration: "underline" }}
+            >
+              Log in
             </a>
           </p>
         </div>
