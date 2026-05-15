@@ -1,16 +1,15 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import db from "../config/db.js";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+import ai, { AI_MODEL } from "../config/ai.js";
 
 export const generateFeedback = async (req, res) => {
   const { batchId, studentId } = req.params;
 
   try {
-    const { code } = req.body; // 👈 receive from frontend
+    const { code } = req.body;
     if (!code) {
       return res.status(400).json({ error: "No code provided" });
     }
+
     // 1. Get batch config
     const [batchRows] = await db.execute(
       "SELECT * FROM batches WHERE id = ? AND user_id = ?",
@@ -27,13 +26,11 @@ export const generateFeedback = async (req, res) => {
     );
     if (studentRows.length === 0)
       return res.status(404).json({ error: "Student not found" });
-    const student = studentRows[0];
 
-    // 3. Build prompt
-    const prompt = `
-You are an experienced and supportive coding teacher. 
-Your role is to review and grade a student's code submission in a way that feels human, empathetic, and constructive.
+    // 3. Build prompts
+    const systemPrompt = `You are an experienced and supportive coding teacher. Your role is to review and grade a student's code submission in a way that feels human, empathetic, and constructive.`;
 
+    const userPrompt = `
 Batch settings:
 - Title: ${batch.title}
 - Instructions: ${batch.instructions}
@@ -52,17 +49,23 @@ Instructions for feedback:
 4. End with a clear scoring suggestion in this exact format on a new line:
 5. If the code is correct, you can simply say:
 "Great job! Your code is correct and meets the requirements."
-6. If the code is too long or too complex, try to skip minors error and just says it like revise back, but majors errors explain it. In case of too much majors errors, says that the students not meet criteria and summarize the errors but not explain it.
+6. If the code is too long or too complex, try to skip minor errors and just say it like revise back, but for major errors explain them. In case of too many major errors, say that the student does not meet criteria and summarize the errors without explaining each.
    Suggested Score: [number between 0 and ${batch.total_points}]
-`;
+`.trim();
 
-    // 4. Call Gemini
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // 4. Call DeepSeek via DeepInfra (OpenAI-compatible API)
+    const completion = await ai.chat.completions.create({
+      model: AI_MODEL,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.4,
+    });
 
-    const result = await model.generateContent(prompt);
-    const aiFeedback = result.response.text();
+    const aiFeedback = completion.choices?.[0]?.message?.content?.trim() || "";
 
-    // 5. Save feedback to DB (optional)
+    // 5. Save feedback to DB
     await db.execute("UPDATE students SET ai_feedback = ? WHERE id = ?", [
       aiFeedback,
       studentId,
